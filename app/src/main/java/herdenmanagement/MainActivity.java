@@ -34,22 +34,21 @@ public class MainActivity extends AppCompatActivity {
      * should go: calling {@link #setContentView(int)} to inflate the
      * activity's UI, using {@link #findViewById} to programmatically interact
      * with widgets in the UI, calling
-     * {@link #managedQuery(android.net.Uri , String[], String, String[], String)} to retrieve
+     * {@link #managedQuery(android.net.Uri, String[], String, String[], String)} to retrieve
      * cursors for data being displayed, etc.
-     *
+     * <p>
      * <p>You can call {@link #finish} from within this function, in
      * which case onDestroy() will be immediately called without any of the rest
      * of the activity lifecycle ({@link #onStart}, {@link #onResume},
      * {@link #onPause}, etc) executing.
-     *
+     * <p>
      * <p><em>Derived classes must call through to the super class's
      * implementation of this method.  If they do not, an exception will be
      * thrown.</em></p>
      *
      * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      * @see #onStart
      * @see #onSaveInstanceState
      * @see #onRestoreInstanceState
@@ -60,28 +59,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Startet das Management der Herde
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AckerView ackerView = (AckerView) findViewById(R.id.acker_view);
-
-                // Dieser Abschnitt erzeugt einen HerdenManager, der zum
-                // Zeitpunkt des Compilierens Bestandteil des Projekts ist
-                // HerdenManager herdenManager = new HerdenManager();
-                // herdenManager.setzeAckerView(ackerView);
-                // herdenManager.manageHerde();
-
-                // Dieser Abschnitt erzeugt einen HerdenManager, der zum
-                // Zeitpunkt des Compilierens NICHT Bestandteil des Projekts ist
-                try {
-                    Class<HerdenController> c = (Class<HerdenController>) MainActivity.class.getClassLoader().loadClass("herdenmanagement.HerdenManager");
-                    HerdenController o = c.newInstance();
-                    o.setzeAckerView(ackerView);
-                    o.manageHerde();
-                } catch (Throwable e) {
-                    Log.wtf("error creating herdenmanager", e);
-                }
-
+                // erzeugt einen HerdenManager
+                HerdenManager herdenManager = new HerdenManager();
+                herdenManager.manageHerde(MainActivity.this);
             }
         }).start();
 
@@ -100,15 +84,14 @@ public class MainActivity extends AppCompatActivity {
      * of a new instance of the activity being started, onNewIntent() will be
      * called on the existing instance with the Intent that was used to
      * re-launch it.
-     *
+     * <p>
      * <p>An activity will always be paused before receiving a new intent, so
      * you can count on {@link #onResume} being called after this method.
-     *
+     * <p>
      * <p>Note that {@link #getIntent} still returns the original Intent.  You
      * can use {@link #setIntent} to update it to this new Intent.
      *
      * @param intent The new intent that was started for the activity.
-     *
      * @see #getIntent
      * @see #setIntent
      * @see #onResume
@@ -131,28 +114,26 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Initialize the contents of the Activity's standard options menu.  You
      * should place your menu items in to <var>menu</var>.
-     *
+     * <p>
      * <p>This is only called once, the first time the options menu is
      * displayed.  To update the menu every time it is displayed, see
      * {@link #onPrepareOptionsMenu}.
-     *
+     * <p>
      * <p>The default implementation populates the menu with standard system
      * menu items.  These are placed in the {@link Menu#CATEGORY_SYSTEM} group so that
      * they will be correctly ordered with application-defined menu items.
      * Deriving classes should always call through to the base implementation.
-     *
+     * <p>
      * <p>You can safely hold on to <var>menu</var> (and any items created
      * from it), making modifications to it as desired, until the next
      * time onCreateOptionsMenu() is called.
-     *
+     * <p>
      * <p>When you add items to the menu, you can implement the Activity's
      * {@link #onOptionsItemSelected} method to handle them there.
      *
      * @param menu The options menu in which you place your items.
-     *
      * @return You must return true for the menu to be displayed;
-     *         if you return false it will not be shown.
-     *
+     * if you return false it will not be shown.
      * @see #onPrepareOptionsMenu
      * @see #onOptionsItemSelected
      */
@@ -169,21 +150,19 @@ public class MainActivity extends AppCompatActivity {
      * its Handler as appropriate).  You can use this method for any items
      * for which you would like to do processing without those other
      * facilities.
-     *
+     * <p>
      * <p>Derived classes should call through to the base class for it to
      * perform the default menu handling.</p>
      *
      * @param item The menu item that was selected.
-     *
      * @return boolean Return false to allow normal menu processing to
-     *         proceed, true to consume it here.
-     *
+     * proceed, true to consume it here.
      * @see #onCreateOptionsMenu
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_export) {
-            // Aker ermitteln
+            // Acker ermitteln
             AckerView ackerView = (AckerView) findViewById(R.id.acker_view);
             Acker acker = ackerView.getAcker();
 
@@ -212,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
 
             if ("xml".equals(extension) || "application/xml".equals(intent.getType()) || "text/xml".equals(intent.getType())) {
-                 readFileFromURI(uri);
+                readFileFromURI(uri);
             }
         } else {
 

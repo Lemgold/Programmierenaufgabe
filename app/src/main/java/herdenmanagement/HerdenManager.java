@@ -1,8 +1,10 @@
 package herdenmanagement;
 
+import android.view.View;
+import android.widget.Toast;
 
+import de.ba.herdenmanagement.R;
 import herdenmanagement.model.Acker;
-import herdenmanagement.model.KreisendesRindvieh;
 import herdenmanagement.model.Rindvieh;
 import herdenmanagement.view.AckerView;
 
@@ -13,7 +15,7 @@ import herdenmanagement.view.AckerView;
  * und das Gras fressen oder rauchen. Steht auf der aktuellen Position einer Kuh ein Eimer,
  * kann diese auch gemolken werden.
  * <p>
- * Durch die Methode {@link #setzeAcker(Acker)} wird ein erzeugter Acker auch grafisch angezeigt.
+ * Mit einer {@link AckerView} wird ein erzeugter Acker auch grafisch angezeigt.
  * Auf diesem können Instanzen von {@link Rindvieh}, {@link herdenmanagement.model.Eimer} und
  * {@link herdenmanagement.model.Gras} eingefügt werden.
  * <p>
@@ -26,83 +28,40 @@ import herdenmanagement.view.AckerView;
  * gemäß des Observer Muster. Wenn man also Veränderungen an einer Kuh vornimmt, wird diese
  * Ihre Beaobachter informieren und diese passen ihre grafische Darstellung an.
  * <p>
- * Die Basisklasse HerdenController organisiert den eigentlichen Umgang den Acker und dessen
- * Anzeige. Sie kann ebenfalls mittels {@link #zeigeNachricht(String)} Nachrichten anzeigen.
+ * Die Klasse verknüpft im Wesentlichen einer {@link Acker} (= Model im MVC Muster) mit seiner
+ * {@link AckerView} (= View im MVC Muster). Das Sie diese und andere Vorgänge
+ * (insbesondere Änderungen auf Acker) organisiert, ist sie der COntroller im MVC Muster.
  */
-public class HerdenManager extends HerdenController {
+public class HerdenManager {
+
+    /**
+     * Grafische Darstellung des Ackers
+     */
+    private AckerView ackerView;
+
+    /**
+     * Zu steuerndes Rindvieh
+     */
+    private Rindvieh vera;
 
     /**
      * Diese Methode lässt Gras wachsen und Rinder weiden.
      */
-    public void manageHerde() {
+    public void manageHerde(final MainActivity mainActivity) {
+        // Acker erzeugen
         Acker mcPom = new Acker(5, 7);
-        setzeAcker(mcPom);
 
-        Rindvieh vera = new Rindvieh("Vera");
+        // AckerView mit Acker verknüpfen
+        ackerView = (AckerView) mainActivity.findViewById(R.id.acker_view);
+        ackerView.setAcker(mcPom);
+        mcPom.fuegeBeobachterHinzu(ackerView);
+
+        // Rinder erzeugen
+        vera = new Rindvieh("Vera");
         mcPom.lassRindWeiden(vera);
-
-        // KreisendesRindvieh erna = new KreisendesRindvieh("Erna");
-        // erna.setzePosition(3,3);
-        // mcPom.lassRindWeiden(erna);
-        // erna.beginneBewegung();
 
         mcPom.lassGrasWachsen(1, 1);
         mcPom.stelleEimerAuf(2, 2);
         mcPom.lassGrasWachsen(2, 4);
-
-        for (int k = 0; k < 4; k++) {
-            for (int m = 0; m < 2; m++) {
-                for (int o = 0; o < 2; o++) {
-                    for (int i = 0; i < 4 + (o * 2); i++) {
-                        vera.geheVor();
-                    }
-                    vera.dreheDichRechtsRum();
-                }
-            }
-        }
-
-        for (int k = 0; k < 4; k++) {
-            for (int i = 0; i < 4; i++) {
-                vera.geheVor();
-            }
-            vera.dreheDichRechtsRum();
-
-            for (int i = 0; i < 6; i++) {
-                vera.geheVor();
-            }
-            vera.dreheDichRechtsRum();
-
-            for (int i = 0; i < 4; i++) {
-                vera.geheVor();
-            }
-            vera.dreheDichRechtsRum();
-
-            for (int i = 0; i < 6; i++) {
-                vera.geheVor();
-            }
-            vera.dreheDichRechtsRum();
-        }
-
-        /* vera.dreheDichRechtsRum();
-        vera.geheVor();
-        vera.dreheDichLinksRum();
-        vera.geheVor();
-
-        vera.frissGras();
-
-        vera.dreheDichRechtsRum();
-        vera.geheVor();
-        vera.dreheDichLinksRum();
-        vera.geheVor();
-
-        int milch = vera.gibMilch();
-        this.zeigeNachricht("Die Kuh gab " + milch + " Liter Milch!");
-
-        vera.dreheDichRechtsRum();
-        vera.geheVor();
-        vera.geheVor();
-        vera.raucheGras();
-
-        this.zeigeNachricht("Vera ist jetzt satt und zufrieden.");*/
     }
 }

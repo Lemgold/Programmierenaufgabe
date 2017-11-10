@@ -232,37 +232,25 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-
-        // wird true, wenn wir das Layout anpassen müssen,
-        // die eigentlichen Listen für Eimer, Gräser etc. müssen wir sofort und in diesem Thread
-        // anpassen, da möglicherweise Nachrichten an die GUI Element gehen
-        boolean relayout = false;
-
-        if (Acker.PROPERTY_EIMER.equals(evt.getPropertyName())) {
-            aktualisiereEimer((Eimer) evt.getOldValue(), (Eimer) evt.getNewValue());
-            relayout = true;
-        }
-
-        if (Acker.PROPERTY_VIECHER.equals(evt.getPropertyName())) {
-            aktualisiereViecher((Rindvieh) evt.getOldValue(), (Rindvieh) evt.getNewValue());
-            relayout = true;
-        }
-
-        if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
-            aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
-            relayout = true;
-        }
-
-        // layout anpassen?
-        if (relayout) {
-            ((Activity) getContext()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    requestLayout();
-                    invalidate();
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (Acker.PROPERTY_EIMER.equals(evt.getPropertyName())) {
+                    aktualisiereEimer((Eimer) evt.getOldValue(), (Eimer) evt.getNewValue());
                 }
-            });
-        }
+
+                if (Acker.PROPERTY_VIECHER.equals(evt.getPropertyName())) {
+                    aktualisiereViecher((Rindvieh) evt.getOldValue(), (Rindvieh) evt.getNewValue());
+                }
+
+                if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
+                    aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
+                }
+
+                requestLayout();
+                invalidate();
+            }
+        });
     }
 
     /**
@@ -275,18 +263,13 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param newValue Bereits auf dem Acker vorhandenes Objekt
      */
     private void aktualisiereGraeser(final Gras oldValue, final Gras newValue) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (newValue != null && oldValue == null) {
-                    GrasView view = new GrasView(getContext(), newValue);
-                    TransitionManager.beginDelayedTransition(AckerView.this);
-                    addView(view, 0);
-                } else if (newValue == null && oldValue != null) {
-                    removeView(findViewById(oldValue.gibId()));
-                }
-            }
-        });
+        if (newValue != null && oldValue == null) {
+            GrasView view = new GrasView(getContext(), newValue);
+            TransitionManager.beginDelayedTransition(AckerView.this);
+            addView(view, 0);
+        } else if (newValue == null && oldValue != null) {
+            removeView(findViewById(oldValue.gibId()));
+        }
     }
 
     /**
@@ -299,18 +282,13 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param newValue Bereits auf dem Acker vorhandenes Objekt
      */
     private void aktualisiereViecher(final Rindvieh oldValue, final Rindvieh newValue) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (newValue != null && oldValue == null) {
-                    RindviehView view = new RindviehView(getContext(), newValue);
-                    TransitionManager.beginDelayedTransition(AckerView.this);
-                    addView(view);
-                } else if (newValue == null && oldValue != null) {
-                    removeView(findViewById(oldValue.gibId()));
-                }
-            }
-        });
+        if (newValue != null && oldValue == null) {
+            RindviehView view = new RindviehView(getContext(), newValue);
+            TransitionManager.beginDelayedTransition(AckerView.this);
+            addView(view);
+        } else if (newValue == null && oldValue != null) {
+            removeView(findViewById(oldValue.gibId()));
+        }
     }
 
     /**
@@ -323,20 +301,18 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param newValue Bereits auf dem Acker vorhandenes Objekt
      */
     private void aktualisiereEimer(final Eimer oldValue, final Eimer newValue) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (newValue != null && oldValue == null) {
-                    EimerView view = new EimerView(getContext(), newValue);
-                    TransitionManager.beginDelayedTransition(AckerView.this);
-                    addView(view, 0);
-                } else if (newValue == null && oldValue != null) {
-                    removeView(findViewById(oldValue.gibId()));
-                }
-            }
-        });
+        if (newValue != null && oldValue == null) {
+            EimerView view = new EimerView(getContext(), newValue);
+            TransitionManager.beginDelayedTransition(AckerView.this);
+            addView(view, 0);
+        } else if (newValue == null && oldValue != null) {
+            removeView(findViewById(oldValue.gibId()));
+        }
     }
 
+    /**
+     * @return Dargstellter Acker
+     */
     public Acker getAcker() {
         return acker;
     }

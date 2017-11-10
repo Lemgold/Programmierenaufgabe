@@ -3,6 +3,8 @@ package herdenmanagement.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import de.ba.herdenmanagement.R;
+
 /**
  * Ein Rindvieh kann sich auf einem {@link Acker} bewegen. Hierzu erbt es die Eigenschaft,
  * eine Position auf einem Acker zu besitzen von {@link PositionsElement}. Zusätlich kann
@@ -52,11 +54,8 @@ public class Rindvieh extends PositionsElement {
     public final static String PROPERTY_STATUS = "herdenmanagement.model.Rindvieh.status";
 
     /**
-     * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
-     * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
-     * übergeben.
-     * <p>
-     * Der Schlüssel dient für Nachrichten zum Property {@link #richtung}.
+     * Richtung der Küh. Rindiecher schauen gern nach Norden. Selten nach Süden, manchmal aber
+     * eben auch nach Osten oder Westen - jenachdem, welche Richtung hier abgelegt wird.
      */
     private RichtungsTyp richtung;
 
@@ -253,7 +252,7 @@ public class Rindvieh extends PositionsElement {
             Position newPosition = gibNaechstePosition(true);
             setzePosition(newPosition);
         } else {
-            setzeNachricht(name + " steht da und schüttelt den Kopf: Vor mir ist kein Acker!");
+            setzeNachricht(R.string.rindvieh_vor_mir_kein_acker);
         }
     }
 
@@ -267,7 +266,7 @@ public class Rindvieh extends PositionsElement {
             Position newPosition = gibNaechstePosition(false);
             setzePosition(newPosition);
         } else {
-            setzeNachricht(name + " steht da und schüttelt den Kopf: Hinter mir ist kein Acker!");
+            setzeNachricht(R.string.rindvieh_hinter_mir_kein_acker);
         }
     }
 
@@ -326,7 +325,7 @@ public class Rindvieh extends PositionsElement {
 
             setzeStatus(StatusTyp.WARTET);
         } else {
-            setzeNachricht(name + " steht da und schüttelt den Kopf: Hier ist nix zu rauchen!");
+            setzeNachricht(R.string.rindvieh_nix_zu_rauchen);
         }
     }
 
@@ -346,7 +345,7 @@ public class Rindvieh extends PositionsElement {
 
             setzeStatus(StatusTyp.WARTET);
         } else {
-            setzeNachricht(name + " steht da und schüttelt den Kopf: Da ist gar kein Gras!");
+            setzeNachricht(R.string.rindvieh_kein_gras);
         }
     }
 
@@ -368,11 +367,11 @@ public class Rindvieh extends PositionsElement {
             if (istMilchImEuter()) {
                 setMilchImEuter(0);
             } else {
-                setzeNachricht(name + " steht da und schüttelt den Kopf: Ich muss erst fressen!");
+                setzeNachricht(R.string.rindvieh_erst_fressen);
             }
         } else {
             result = 0;
-            setzeNachricht(name + " steht da und schüttelt den Kopf: Da steht kein Eimer!");
+            setzeNachricht(R.string.rindvieh_kein_eimer);
         }
         return result;
     }

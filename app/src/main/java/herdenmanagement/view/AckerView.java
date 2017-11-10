@@ -34,11 +34,24 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         setWillNotDraw(false);
     }
 
+    /**
+     * Erzeugt eine neue Ansicht für einen Acker
+     *
+     * @param context Context der App
+     * @param attrs   Attribute zur grafischen Darstellung
+     */
     public AckerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
     }
 
+    /**
+     * Erzeugt eine neue Ansicht für einen Acker
+     *
+     * @param context      Context der App
+     * @param attrs        Attribute zur grafischen Darstellung
+     * @param defStyleAttr Attribute zum Stil
+     */
     public AckerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWillNotDraw(false);
@@ -108,16 +121,10 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
 
         int columns = acker == null ? 0 : acker.zaehleSpalten();
         float columnWidth = (int) (width / columns);
-        if (columns < 1) {
-            columns = 1;
-        }
 
         int count = getChildCount();
         int rows = acker == null ? 0 : acker.zaehleZeilen();
         float rowHeight = (int) (height / rows);
-        if (rows < 1) {
-            rows = 1;
-        }
 
         // set LayoutParams for all childs
         for (int i = 0; i < count; i++) {
@@ -159,11 +166,11 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         if (acker != null) {
             // Anzahl der Spalten und deren Breite ermitteln
             int columns = acker.zaehleSpalten();
-            float columnWidth = (int) (getWidth() / columns);
+            float columnWidth = getWidth() / columns;
 
             // Anzahl der Zeilen und deren Höhe ermitteln
             int rows = acker.zaehleZeilen();
-            float rowHeight = (int) (getHeight() / rows);
+            float rowHeight = getHeight() / rows;
 
             // Zeilenweise ....
             for (int y = 0; y < rows; y++) {

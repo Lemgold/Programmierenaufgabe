@@ -54,7 +54,6 @@ public class HerdenManager {
         // AckerView mit Acker verknüpfen
         ackerView = (AckerView) mainActivity.findViewById(R.id.acker_view);
         ackerView.setAcker(mcPom);
-        mcPom.fuegeBeobachterHinzu(ackerView);
 
         // Rinder erzeugen
         vera = new Rindvieh("Vera");

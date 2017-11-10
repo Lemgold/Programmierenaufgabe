@@ -253,11 +253,6 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
             relayout = true;
         }
 
-        if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
-            aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
-            relayout = true;
-        }
-
         // layout anpassen?
         if (relayout) {
             ((Activity) getContext()).runOnUiThread(new Runnable() {

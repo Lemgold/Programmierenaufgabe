@@ -1,5 +1,9 @@
 package herdenmanagement.model;
 
+import android.media.MediaPlayer;
+
+import de.ba.herdenmanagement.R;
+
 /**
  * Tanzrinder erben alle Eigenschaften der Klasse {@link Rindvieh}. Sie können sich also
  * genauso auf einem Acker bewegen. Tanzrinder können zusätzlich seitwärts gehen.
@@ -27,6 +31,22 @@ public class TanzRind extends Rindvieh {
     protected Position gibNaechstePositionRechts() {
         Position position = gibPosition();
 
+        if (gibRichtung() == RichtungsTyp.NORD) {
+            position.x = position.x + 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.OST) {
+            position.y = position.y - 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.SUED) {
+            position.x = position.x - 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.WEST) {
+            position.y = position.y + 1;
+            return position;
+        }
+
+        // Da die Kuh stets in eine der obigen Richtungen schauen sollte,
+        // kommen wir hier nur dann an, wenn die Richtung der Kuh nicht definiert ist.
         return position;
     }
 
@@ -36,6 +56,22 @@ public class TanzRind extends Rindvieh {
     protected Position gibNaechstePositionLinks() {
         Position position = gibPosition();
 
+        if (gibRichtung() == RichtungsTyp.NORD) {
+            position.x = position.x - 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.OST) {
+            position.y = position.y + 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.SUED) {
+            position.x = position.x + 1;
+            return position;
+        } else if (gibRichtung() == RichtungsTyp.WEST) {
+            position.y = position.y - 1;
+            return position;
+        }
+
+        // Da die Kuh stets in eine der obigen Richtungen schauen sollte,
+        // kommen wir hier nur dann an, wenn die Richtung der Kh nicht definiert ist.
         return position;
     }
 
@@ -43,14 +79,25 @@ public class TanzRind extends Rindvieh {
      * Bewegt das Rind seitwärts nach links
      */
     public void geheSeitwaertsNachLinks() {
-
+        Position naechstePosition = gibNaechstePositionLinks();
+        if (gehtsDaLinksWeiter()) {
+            setzePosition(naechstePosition);
+        } else {
+            setzeNachricht(R.string.rindvieh_nix_acker);
+        }
     }
 
     /**
      * Bewegt das Rind seitwärts nach rechts
      */
     public void geheSeitwaertsNachRechts() {
-
+        Position naechstePosition = gibNaechstePositionRechts();
+        Acker acker = gibAcker();
+        if (acker.istPositionGueltig(naechstePosition)) {
+            setzePosition(naechstePosition);
+        } else {
+            setzeNachricht(R.string.rindvieh_nix_acker);
+        }
     }
 
     /**
@@ -59,15 +106,34 @@ public class TanzRind extends Rindvieh {
      * @return true, wenn die Kuh auf dem Acker weiter nach lnks gehen kann
      */
     public boolean gehtsDaLinksWeiter() {
-        return false;
+        Position naechstePosition = gibNaechstePositionLinks();
+        Acker acker = gibAcker();
+        return acker.istPositionGueltig(naechstePosition);
     }
 
     /**
      * Prüft die Grenzen des Ackers.
      *
-     * @return true, wenn die Kuh auf dem Acker weiter nach lnks gehen kann
+     * @return true, wenn die Kuh auf dem Acker weiter nach links gehen kann
      */
     public boolean gehtsDaRechtsWeiter() {
-        return false;
+        Position naechstePosition = gibNaechstePositionRechts();
+        Acker acker = gibAcker();
+        return acker.istPositionGueltig(naechstePosition);
+    }
+
+    public void chaChaCha(MediaPlayer player) {
+        player.start();
+
+        for (int i = 0; i < 10; i++) {
+            geheVor();
+            geheZurueck();
+            geheSeitwaertsNachLinks();
+            geheSeitwaertsNachLinks();
+            geheZurueck();
+            geheVor();
+            geheSeitwaertsNachRechts();
+            geheSeitwaertsNachRechts();
+        }
     }
 }

@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Ein Positionselement kann auf einem {@link Acker} positioniert werden.
- *
+ * <p>
  * Änderungen an seinen Eigenschaften kann es PropertyChangeListener senden. Hierzu
  * müssen diese den Objekten dieser Klasse mit {@link #fuegeBeobachterHinzu(PropertyChangeListener)}
  * hinzugefügt werden.
- *
+ * <p>
  * Jedes PositionsElement verfügt über eine eindeutige ID.
  * Im Muster Model View Controller sind Objekte erbender Klassen Bestandteil des Model.
  */
@@ -24,7 +24,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
-     *
+     * <p>
      * Der Schlüsel dient für Nachrichten zum Property {@link #nachricht}.
      */
     public final static String PROPERTY_NACHRICHT = "herdenmanagement.model.PositionsElement.nachricht";
@@ -33,7 +33,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
-     *
+     * <p>
      * Der Schlüssel dient für Nachrichten zum Property {@link #position}.
      */
     public final static String PROPERTY_POSITION = "herdenmanagement.model.PositionsElement.position";
@@ -49,7 +49,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * @return generierte ID
      */
     private static int generateId() {
-        for (;;) {
+        for (; ; ) {
             final int result = nextGeneratedId.get();
             // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
             int newValue = result + 1;
@@ -63,7 +63,7 @@ public class PositionsElement extends BeobachtbaresElement {
     /**
      * ID des {@link PositionsElement}. Wird während der Initialisierung gesetzt und sollte
      * später nicht mehr verändert werden.
-     *
+     * <p>
      * Darstellende Views besitzen die selbe ID, um die Suche danach zu beschleunigen und
      * zu vereinfachen.
      */
@@ -85,7 +85,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * erzeugen. Wenn der PropertyChangeListener dem Schlüssel PROPERTY_NACHRICHT lauscht,
      * wird er über siese Nachrichten informiert.
      */
-    private String nachricht;
+    private Object nachricht;
 
     /**
      * Setzt die ID und positioniert das Element bei 0:0. Ein Acker wird noch nicht gesetzt.
@@ -107,8 +107,22 @@ public class PositionsElement extends BeobachtbaresElement {
     /**
      * @return Letzte Nachricht (Fehler- oder Vollzugsmeldung)
      */
-    public String gibNachricht() {
+    public Object gibNachricht() {
         return nachricht;
+    }
+
+    /**
+     * Setzen der aktuellen Nachricht. Die PropertyChangeListener werden informiert.
+     * Die Ressourcen-ID muss in den Strings der App vorhanden sein. Mit dieser Methoden werden
+     * keine Integer Werte angezeigt, sondern die Zeichenketten zur Ressourcen-ID!
+     *
+     * @param resourcenID Ressourcen-ID der Nachricht
+     */
+    protected void setzeNachricht(int resourcenID) {
+        Object oldNachricht = this.nachricht;
+        this.nachricht = resourcenID;
+
+        informiereBeobachter(PROPERTY_NACHRICHT, oldNachricht, nachricht);
     }
 
     /**
@@ -117,7 +131,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * @param nachricht Letzte Nachricht (Fehler- oder Vollzugsmeldung)
      */
     public void setzeNachricht(String nachricht) {
-        String oldNachricht = this.nachricht;
+        Object oldNachricht = this.nachricht;
         this.nachricht = nachricht;
 
         informiereBeobachter(PROPERTY_NACHRICHT, oldNachricht, nachricht);
@@ -159,14 +173,20 @@ public class PositionsElement extends BeobachtbaresElement {
      * Friert den aktuellen Thread für 1s ein.
      */
     protected void warte() {
-        try{ Thread.sleep(WARTEZEIT); }catch(InterruptedException ignored){ }
+        try {
+            Thread.sleep(WARTEZEIT);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     /**
      * Friert den aktuellen Thread für 5s ein.
      */
     protected void warteLange() {
-        try{ Thread.sleep(WARTEZEIT); }catch(InterruptedException ignored){ }
+        try {
+            Thread.sleep(WARTEZEIT);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     /**
@@ -181,5 +201,12 @@ public class PositionsElement extends BeobachtbaresElement {
      */
     protected Acker gibAcker() {
         return acker;
+    }
+
+    /**
+     * @return Name des Positionselements, in der regel der Name der Klasse
+     */
+    public String gibName() {
+        return getClass().getSimpleName();
     }
 }

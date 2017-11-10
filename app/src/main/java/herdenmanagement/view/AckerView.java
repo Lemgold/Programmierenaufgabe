@@ -44,6 +44,12 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         setWillNotDraw(false);
     }
 
+    /**
+     * Beim Setzen des Ackers werden die momentan auf diesem vorhandene PositionsElement Objekte
+     * angezeigt.
+     *
+     * @param acker Acker zur Ansicht
+     */
     public void setAcker(Acker acker) {
         if (this.acker != null) {
             this.acker.entferneBeobachter(this);
@@ -214,6 +220,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
 
     /**
      * Legt die GUI Elemente an, wenn Eimer, Gräser etc. angelegt wurden
+     *
      * @param evt Interessant sind z.B. die Nachrichten mit den Property-Name Acker.PROPERTY_EIMER
      */
     @Override
@@ -256,46 +263,76 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         }
     }
 
-    private void aktualisiereGraeser(Gras oldValue, Gras newValue) {
-        if (newValue != null && oldValue == null) {
-            GrasView view = new GrasView(getContext(), newValue);
-
-            TransitionManager.beginDelayedTransition(this);
-            addView(view, 0);
-        } else if (newValue == null && oldValue != null) {
-            View view = findViewById(oldValue.gibId());
-
-            // TransitionManager.beginDelayedTransition(this);
-            removeView(view);
-        }
+    /**
+     * Aktualisiert die Ansicht für die Gräser. Für neue Objekte
+     * (newValue != null && oldValue == null) wird eine View erzeugt.
+     * Bei zu entfernenden Objekte (newValue == null && oldValue != null)
+     * wird auch die View entfernt.
+     *
+     * @param oldValue Neues Objekt auf dem Acker
+     * @param newValue Bereits auf dem Acker vorhandenes Objekt
+     */
+    private void aktualisiereGraeser(final Gras oldValue, final Gras newValue) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (newValue != null && oldValue == null) {
+                    GrasView view = new GrasView(getContext(), newValue);
+                    TransitionManager.beginDelayedTransition(AckerView.this);
+                    addView(view, 0);
+                } else if (newValue == null && oldValue != null) {
+                    removeView(findViewById(oldValue.gibId()));
+                }
+            }
+        });
     }
 
-    private void aktualisiereViecher(Rindvieh oldValue, Rindvieh newValue) {
-        if (newValue != null && oldValue == null) {
-            RindviehView view = new RindviehView(getContext(), newValue);
-
-            TransitionManager.beginDelayedTransition(this);
-            addView(view);
-        } else if (newValue == null && oldValue != null) {
-            View view = findViewById(oldValue.gibId());
-
-            // TransitionManager.beginDelayedTransition(this);
-            removeView(view);
-        }
+    /**
+     * Aktualisiert die Ansicht für die Rinder. Für neue Objekte
+     * (newValue != null && oldValue == null) wird eine View erzeugt.
+     * Bei zu entfernenden Objekte (newValue == null && oldValue != null)
+     * wird auch die View entfernt.
+     *
+     * @param oldValue Neues Objekt auf dem Acker
+     * @param newValue Bereits auf dem Acker vorhandenes Objekt
+     */
+    private void aktualisiereViecher(final Rindvieh oldValue, final Rindvieh newValue) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (newValue != null && oldValue == null) {
+                    RindviehView view = new RindviehView(getContext(), newValue);
+                    TransitionManager.beginDelayedTransition(AckerView.this);
+                    addView(view);
+                } else if (newValue == null && oldValue != null) {
+                    removeView(findViewById(oldValue.gibId()));
+                }
+            }
+        });
     }
 
-    private void aktualisiereEimer(Eimer oldValue, Eimer newValue) {
-        if (newValue != null && oldValue == null) {
-            EimerView view = new EimerView(getContext(), newValue);
-
-            TransitionManager.beginDelayedTransition(this);
-            addView(view, 0);
-        } else if (newValue == null && oldValue != null) {
-            View view = findViewById(oldValue.gibId());
-
-            // TransitionManager.beginDelayedTransition(this);
-            removeView(view);
-        }
+    /**
+     * Aktualisiert die Ansicht für die Eimer. Für neue Objekte
+     * (newValue != null && oldValue == null) wird eine View erzeugt.
+     * Bei zu entfernenden Objekte (newValue == null && oldValue != null)
+     * wird auch die View entfernt.
+     *
+     * @param oldValue Neues Objekt auf dem Acker
+     * @param newValue Bereits auf dem Acker vorhandenes Objekt
+     */
+    private void aktualisiereEimer(final Eimer oldValue, final Eimer newValue) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (newValue != null && oldValue == null) {
+                    EimerView view = new EimerView(getContext(), newValue);
+                    TransitionManager.beginDelayedTransition(AckerView.this);
+                    addView(view, 0);
+                } else if (newValue == null && oldValue != null) {
+                    removeView(findViewById(oldValue.gibId()));
+                }
+            }
+        });
     }
 
     public Acker getAcker() {

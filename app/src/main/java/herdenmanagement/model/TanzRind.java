@@ -27,6 +27,7 @@ public class TanzRind extends Rindvieh {
     protected Position gibNaechstePositionRechts() {
         Position position = gibPosition();
 
+
         return position;
     }
 
@@ -65,9 +66,16 @@ public class TanzRind extends Rindvieh {
     /**
      * Prüft die Grenzen des Ackers.
      *
-     * @return true, wenn die Kuh auf dem Acker weiter nach lnks gehen kann
+     * @return true, wenn die Kuh auf dem Acker weiter nach links gehen kann
      */
     public boolean gehtsDaRechtsWeiter() {
         return false;
+    }
+
+    /**
+     * Das TanzRind tanzt Cha Cha Cha!
+     */
+    public void chaChaCha() {
+
     }
 }

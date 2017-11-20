@@ -21,7 +21,15 @@ import herdenmanagement.model.Gras;
 import herdenmanagement.model.Position;
 import herdenmanagement.model.Rindvieh;
 
-
+/**
+ * Basisklasse für die Darstellung von Bundesländern wie Macklemburg-Vorpommern.
+ *
+ * Die AckerView ist Observer des Ackers. Werden auf letzterem Eimer, Gräser und Lebewesen
+ * (insbesondere Kühe) eingefügt, informiert der Acker Objekte dieser Klasse AckerView über
+ * die Änderungen. Es ist Aufgabe der AckerView für die neuen Elemente korrespondierend eine
+ * {@link EimerView}, {@link GrasView} oder {@link RindviehView} zu erzeugen und als Child-Element
+ * (siehe {@link #addView(View)}) anzuzeigen.
+ */
 public class AckerView extends FrameLayout implements PropertyChangeListener {
 
     /**
@@ -215,9 +223,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param bottom  Bottom position, relative to parent
      */
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-
         for (int i = 0; i < getChildCount(); i++) {
-
             View child = getChildAt(i);
             final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
@@ -232,25 +238,17 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (Acker.PROPERTY_EIMER.equals(evt.getPropertyName())) {
-                    aktualisiereEimer((Eimer) evt.getOldValue(), (Eimer) evt.getNewValue());
-                }
+        if (Acker.PROPERTY_EIMER.equals(evt.getPropertyName())) {
+            aktualisiereEimer((Eimer) evt.getOldValue(), (Eimer) evt.getNewValue());
+        }
 
-                if (Acker.PROPERTY_VIECHER.equals(evt.getPropertyName())) {
-                    aktualisiereViecher((Rindvieh) evt.getOldValue(), (Rindvieh) evt.getNewValue());
-                }
+        if (Acker.PROPERTY_VIECHER.equals(evt.getPropertyName())) {
+            aktualisiereViecher((Rindvieh) evt.getOldValue(), (Rindvieh) evt.getNewValue());
+        }
 
-                if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
-                    aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
-                }
-
-                requestLayout();
-                invalidate();
-            }
-        });
+        if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
+            aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
+        }
     }
 
     /**
@@ -264,11 +262,9 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereGraeser(final Gras oldValue, final Gras newValue) {
         if (newValue != null && oldValue == null) {
-            GrasView view = new GrasView(getContext(), newValue);
-            TransitionManager.beginDelayedTransition(AckerView.this);
-            addView(view, 0);
+            addViewAmimated(new GrasView(getContext(), newValue));
         } else if (newValue == null && oldValue != null) {
-            removeView(findViewById(oldValue.gibId()));
+            removeViewAnimated(oldValue.gibId());
         }
     }
 
@@ -283,11 +279,9 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereViecher(final Rindvieh oldValue, final Rindvieh newValue) {
         if (newValue != null && oldValue == null) {
-            RindviehView view = new RindviehView(getContext(), newValue);
-            TransitionManager.beginDelayedTransition(AckerView.this);
-            addView(view);
+            addViewAmimated(new RindviehView(getContext(), newValue));
         } else if (newValue == null && oldValue != null) {
-            removeView(findViewById(oldValue.gibId()));
+            removeViewAnimated(oldValue.gibId());
         }
     }
 
@@ -302,16 +296,59 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereEimer(final Eimer oldValue, final Eimer newValue) {
         if (newValue != null && oldValue == null) {
-            EimerView view = new EimerView(getContext(), newValue);
-            TransitionManager.beginDelayedTransition(AckerView.this);
-            addView(view, 0);
+            addViewAmimated(new EimerView(getContext(), newValue));
         } else if (newValue == null && oldValue != null) {
-            removeView(findViewById(oldValue.gibId()));
+            removeViewAnimated(oldValue.gibId());
         }
     }
 
     /**
-     * @return Dargstellter Acker
+     * @param id Ressourcen-ID der zu entfernenden View
+     */
+    private void removeViewAnimated(final int id) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // fade out the view
+                View v = findViewById(id);
+                TransitionManager.beginDelayedTransition(AckerView.this);
+                v.setAlpha(0);
+
+                // remove the view
+                removeView(findViewById(id));
+
+                // layout anpassen?
+                requestLayout();
+                invalidate();
+            }
+        });
+    }
+
+    /**
+     * Fügt dem Acker eine neue Darstellung für Eimer, Gras, etc. hinzu
+     *
+     * @param view Hinzufügende View
+     */
+    private void addViewAmimated(final View view) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // langsam einblenden
+                view.setAlpha(0);
+
+                TransitionManager.beginDelayedTransition(AckerView.this);
+                view.setAlpha(1);
+                addView(view, 0);
+
+                // layout anpassen?
+                requestLayout();
+                invalidate();
+            }
+        });
+    }
+
+    /**
+     * @return Dargestellter Acker
      */
     public Acker getAcker() {
         return acker;

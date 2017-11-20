@@ -210,7 +210,7 @@ public class Rindvieh extends PositionsElement {
         RichtungsTyp oldRichtung = this.richtung;
         this.richtung = richtung;
 
-        warte();
+        warteNachBewegung();
 
         informiereBeobachter(PROPERTY_RICHTUNG, oldRichtung, richtung);
     }
@@ -321,7 +321,7 @@ public class Rindvieh extends PositionsElement {
             gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.RAUCHT);
 
-            warteLange();
+            warteNachStatusÄnderung();
 
             setzeStatus(StatusTyp.WARTET);
         } else {
@@ -340,7 +340,7 @@ public class Rindvieh extends PositionsElement {
             gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.FRISST);
 
-            warteLange();
+            warteNachStatusÄnderung();
             setMilchImEuter(messeMilchImEuter() + 1);
 
             setzeStatus(StatusTyp.WARTET);

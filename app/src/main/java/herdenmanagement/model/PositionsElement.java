@@ -18,7 +18,12 @@ public class PositionsElement extends BeobachtbaresElement {
     /**
      * Wartezeit für Bewegungen in ms
      */
-    public static int WARTEZEIT = 1000;
+    public static int WARTEZEIT_BEWEGUNG = 0;
+
+    /**
+     * Wartezeit für Änderungen des Status ohne Bewegung
+     */
+    public static int WARTEZEIT_STATUS_ÄNDERUNG = 1000;
 
     /**
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
@@ -154,7 +159,7 @@ public class PositionsElement extends BeobachtbaresElement {
         Position oldPosition = this.position;
         this.position = position;
 
-        warte();
+        warteNachBewegung();
 
         informiereBeobachter(PROPERTY_POSITION, oldPosition, position);
     }
@@ -170,21 +175,21 @@ public class PositionsElement extends BeobachtbaresElement {
     }
 
     /**
-     * Friert den aktuellen Thread für 1s ein.
+     * Friert den aktuellen Thread für {@link PositionsElement#WARTEZEIT_STATUS_ÄNDERUNG} ein.
      */
-    protected void warte() {
+    protected void warteNachBewegung() {
         try {
-            Thread.sleep(WARTEZEIT);
+            Thread.sleep(WARTEZEIT_BEWEGUNG);
         } catch (InterruptedException ignored) {
         }
     }
 
     /**
-     * Friert den aktuellen Thread für 5s ein.
+     * Friert den aktuellen Thread für {@link PositionsElement#WARTEZEIT_STATUS_ÄNDERUNG} ein.
      */
-    protected void warteLange() {
+    protected void warteNachStatusÄnderung() {
         try {
-            Thread.sleep(WARTEZEIT);
+            Thread.sleep(WARTEZEIT_STATUS_ÄNDERUNG);
         } catch (InterruptedException ignored) {
         }
     }

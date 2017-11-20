@@ -18,7 +18,7 @@ public class PositionsElement extends BeobachtbaresElement {
     /**
      * Wartezeit für Bewegungen in ms
      */
-    public static int WARTEZEIT_BEWEGUNG = 0;
+    public static int WARTEZEIT_BEWEGUNG = 500;
 
     /**
      * Wartezeit für Änderungen des Status ohne Bewegung

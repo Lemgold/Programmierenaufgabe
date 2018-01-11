@@ -80,55 +80,12 @@ public class Rindvieh extends PositionsElement {
     /**
      * Mögliche Richtungen, in die die Kuh schauen kann
      */
-    public enum RichtungsTyp {
-        /**
-         * Konstante Werte für die Ausrichtung der Kuh
-         */
-        NORD(0),
-        OST(1),
-        SUED(2),
-        WEST(3);
-
-        /**
-         * interer Speicher für die Richtung
-         */
-        final int nativeInt;
-
-        /**
-         * Von den konstanten Werten verwendeter Constructor
-         *
-         * @param ni Ausrichtung
-         */
-        RichtungsTyp(int ni) {
-            nativeInt = ni;
-        }
-    }
+    public enum RichtungsTyp {NORD, OST, SUED, WEST}
 
     /**
      * Möglicher Status der Kuh, wichtig für die Anzeige von Bildern
      */
-    public enum StatusTyp {
-        /**
-         * Konstante Werte für die Ausrichtung der Kuh
-         */
-        WARTET(0),
-        FRISST(1),
-        RAUCHT(2);
-
-        /**
-         * interer Speicher für den Status
-         */
-        final int nativeInt;
-
-        /**
-         * Von den konstanten Werten verwendeter Constructor
-         *
-         * @param ni Status
-         */
-        StatusTyp(int ni) {
-            nativeInt = ni;
-        }
-    }
+    public enum StatusTyp {WARTET, FRISST, RAUCHT}
 
     /**
      * Setzt den Namen des Rindviehs, setzt den Status {@link StatusTyp#WARTET} und ruft
@@ -209,9 +166,6 @@ public class Rindvieh extends PositionsElement {
     protected void setRichtung(RichtungsTyp richtung) {
         RichtungsTyp oldRichtung = this.richtung;
         this.richtung = richtung;
-
-        warteNachBewegung();
-
         informiereBeobachter(PROPERTY_RICHTUNG, oldRichtung, richtung);
     }
 
@@ -252,7 +206,7 @@ public class Rindvieh extends PositionsElement {
             Position newPosition = gibNaechstePosition(true);
             setzePosition(newPosition);
         } else {
-            setzeNachricht(R.string.rindvieh_vor_mir_kein_acker);
+            zeigeNachricht(R.string.rindvieh_vor_mir_kein_acker);
         }
     }
 
@@ -266,7 +220,7 @@ public class Rindvieh extends PositionsElement {
             Position newPosition = gibNaechstePosition(false);
             setzePosition(newPosition);
         } else {
-            setzeNachricht(R.string.rindvieh_hinter_mir_kein_acker);
+            zeigeNachricht(R.string.rindvieh_hinter_mir_kein_acker);
         }
     }
 
@@ -318,14 +272,11 @@ public class Rindvieh extends PositionsElement {
      */
     public void raucheGras() {
         if (gibAcker().istDaGras(gibPosition())) {
-            gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.RAUCHT);
-
-            warteNachStatusÄnderung();
-
+            gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.WARTET);
         } else {
-            setzeNachricht(R.string.rindvieh_nix_zu_rauchen);
+            zeigeNachricht(R.string.rindvieh_nix_zu_rauchen);
         }
     }
 
@@ -337,15 +288,12 @@ public class Rindvieh extends PositionsElement {
      */
     public void frissGras() {
         if (gibAcker().istDaGras(gibPosition())) {
-            gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.FRISST);
-
-            warteNachStatusÄnderung();
             setMilchImEuter(messeMilchImEuter() + 1);
-
+            gibAcker().entferneGras(gibPosition());
             setzeStatus(StatusTyp.WARTET);
         } else {
-            setzeNachricht(R.string.rindvieh_kein_gras);
+            zeigeNachricht(R.string.rindvieh_kein_gras);
         }
     }
 
@@ -367,11 +315,11 @@ public class Rindvieh extends PositionsElement {
             if (istMilchImEuter()) {
                 setMilchImEuter(0);
             } else {
-                setzeNachricht(R.string.rindvieh_erst_fressen);
+                zeigeNachricht(R.string.rindvieh_erst_fressen);
             }
         } else {
             result = 0;
-            setzeNachricht(R.string.rindvieh_kein_eimer);
+            zeigeNachricht(R.string.rindvieh_kein_eimer);
         }
         return result;
     }

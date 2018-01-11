@@ -16,16 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PositionsElement extends BeobachtbaresElement {
 
     /**
-     * Wartezeit für Bewegungen in ms
-     */
-    public static int WARTEZEIT_BEWEGUNG = 500;
-
-    /**
-     * Wartezeit für Änderungen des Status ohne Bewegung
-     */
-    public static int WARTEZEIT_STATUS_ÄNDERUNG = 1000;
-
-    /**
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
@@ -110,20 +100,13 @@ public class PositionsElement extends BeobachtbaresElement {
     }
 
     /**
-     * @return Letzte Nachricht (Fehler- oder Vollzugsmeldung)
-     */
-    public Object gibNachricht() {
-        return nachricht;
-    }
-
-    /**
      * Setzen der aktuellen Nachricht. Die PropertyChangeListener werden informiert.
      * Die Ressourcen-ID muss in den Strings der App vorhanden sein. Mit dieser Methoden werden
      * keine Integer Werte angezeigt, sondern die Zeichenketten zur Ressourcen-ID!
      *
      * @param resourcenID Ressourcen-ID der Nachricht
      */
-    protected void setzeNachricht(int resourcenID) {
+    protected void zeigeNachricht(int resourcenID) {
         Object oldNachricht = this.nachricht;
         this.nachricht = resourcenID;
 
@@ -159,8 +142,6 @@ public class PositionsElement extends BeobachtbaresElement {
         Position oldPosition = this.position;
         this.position = position;
 
-        warteNachBewegung();
-
         informiereBeobachter(PROPERTY_POSITION, oldPosition, position);
     }
 
@@ -170,28 +151,9 @@ public class PositionsElement extends BeobachtbaresElement {
      * @param x X-Koordinate der neuen Position
      * @param y Y-Koordinate der neuen Position
      */
+    @Deprecated
     public void setzePosition(int x, int y) {
         setzePosition(new Position(x, y));
-    }
-
-    /**
-     * Friert den aktuellen Thread für {@link PositionsElement#WARTEZEIT_STATUS_ÄNDERUNG} ein.
-     */
-    protected void warteNachBewegung() {
-        try {
-            Thread.sleep(WARTEZEIT_BEWEGUNG);
-        } catch (InterruptedException ignored) {
-        }
-    }
-
-    /**
-     * Friert den aktuellen Thread für {@link PositionsElement#WARTEZEIT_STATUS_ÄNDERUNG} ein.
-     */
-    protected void warteNachStatusÄnderung() {
-        try {
-            Thread.sleep(WARTEZEIT_STATUS_ÄNDERUNG);
-        } catch (InterruptedException ignored) {
-        }
     }
 
     /**

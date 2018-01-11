@@ -1,10 +1,11 @@
 package herdenmanagement;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import de.ba.herdenmanagement.R;
 
 import herdenmanagement.model.Acker;
 import herdenmanagement.view.AckerView;
+import herdenmanagement.view.Animator;
 import herdenmanagement.xml.XMLReader;
 import herdenmanagement.xml.XMLWriter;
 
@@ -27,7 +29,9 @@ import herdenmanagement.xml.XMLWriter;
  * Hierzu wird unser {@link HerdenManager} initialisiert und mit einer {@link AckerView}
  * verknüpft.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
+
+    private HerdenManager herdenManager;
 
     /**
      * Called when the activity is starting.  This is where most initialization
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
      * Called after {@link #onCreate} &mdash; or after {@link #onRestart} when
      * the activity had been stopped, but is now again being displayed to the
      * user.  It will be followed by {@link #onResume}.
-     *
+     * <p>
      * <p><em>Derived classes must call through to the super class's
      * implementation of this method.  If they do not, an exception will be
      * thrown.</em></p>
@@ -82,15 +86,73 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Startet das Management der Herde
+        // erzeugt einen HerdenManager
+        herdenManager = new HerdenManager();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // erzeugt einen HerdenManager
-                HerdenManager herdenManager = new HerdenManager();
+                // Während manageHerde möchten wir alle Aktionen sehen
+                AckerView ackerView = (AckerView)findViewById(R.id.acker_view);
+
+                // Acker einrichten, dies soll in einem "Rutsch" passieren,
+                // die einzelnen Aktionen werden nicht animiert
+                ackerView.setThreading(Animator.Threading.ASYNCHRONOUS_NO_WAIT);
+                herdenManager.richteAckerEin(MainActivity.this);
+
+                // Während manageHerde möchten wir alle Aktionen einzeln nachvollziehen
+                ackerView.setThreading(Animator.Threading.SYNCHRONOUS);
+
+                // bewegt ein Rind oder mehrer auf dem Acker
                 herdenManager.manageHerde(MainActivity.this);
+
+                // Alle Aktionen auf dem Acker, die jetzt folgen, werden direkt asynchron
+                // ausgeführt. Betroffen sind vor allem Button-Clicks
+                ackerView.setThreading(Animator.Threading.ASYNCHRONOUS);
             }
         }).start();
+    }
+
+    /**
+     * Called by the system when the device configuration changes while your
+     * activity is running.  Note that this will <em>only</em> be called if
+     * you have selected configurations you would like to handle with the
+     * {@link android.R.attr#configChanges} attribute in your manifest.  If
+     * any configuration change occurs that is not selected to be reported
+     * by that attribute, then instead of reporting it the system will stop
+     * and restart the activity (to have it launched with the new
+     * configuration).
+     *
+     * <p>At the time that this function has been called, your Resources
+     * object will have been updated to return resource values matching the
+     * new configuration.
+     *
+     * @param newConfig The new device configuration.
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Den Acker der aktuellen AckerView ermitteln
+        AckerView ackerView = (AckerView)findViewById(R.id.acker_view);
+        Acker acker = ackerView.getAcker();
+
+        Animator.Threading currentThreading = ackerView.getThreading();
+        ackerView.setThreading(Animator.Threading.ASYNCHRONOUS_NO_WAIT);
+
+        ackerView.setAcker(null);
+
+        // Das neue Layout setzen
+        // Damit wird auch ein eventuell für das Querformat definiertes Layout verwendet
+        setContentView(R.layout.activity_main);
+
+        // Die AckerView dürfte sich durch die vorhergehende Anweisung geändert haben
+        // Diese wird zukünftig vom vorhandenen Acker genutzt
+        ackerView = (AckerView)findViewById(R.id.acker_view);
+        ackerView.setThreading(Animator.Threading.ASYNCHRONOUS_NO_WAIT);
+        ackerView.setAcker(acker);
+
+        ackerView.setThreading(currentThreading);
     }
 
     /**

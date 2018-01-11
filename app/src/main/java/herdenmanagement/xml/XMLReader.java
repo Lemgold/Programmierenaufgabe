@@ -6,8 +6,7 @@ import org.simpleframework.xml.core.Persister;
 import java.io.InputStream;
 
 import herdenmanagement.model.Acker;
-import herdenmanagement.model.Eimer;
-import herdenmanagement.model.Gras;
+import herdenmanagement.model.Position;
 import herdenmanagement.model.Rindvieh;
 
 public class XMLReader {
@@ -37,17 +36,17 @@ public class XMLReader {
         return acker;
     }
 
-    private Gras importGras(GrasTyp grasTyp, Acker acker) {
-        return acker.lassGrasWachsen(grasTyp.getPosition().getX(), grasTyp.getPosition().getY());
+    private void importGras(GrasTyp grasTyp, Acker acker) {
+        acker.lassGrasWachsen(new Position(grasTyp.getPosition().getX(), grasTyp.getPosition().getY()));
     }
 
-    private Eimer importEimer(EimerTyp eimerTyp, Acker acker) {
-        return acker.stelleEimerAuf(eimerTyp.getPosition().getX(), eimerTyp.getPosition().getY());
+    private void importEimer(EimerTyp eimerTyp, Acker acker) {
+        acker.stelleEimerAuf(new Position(eimerTyp.getPosition().getX(), eimerTyp.getPosition().getY()));
     }
 
     private void importRindvieh(RindviehTyp rindviehTyp, Acker acker) {
         Rindvieh rindvieh = new Rindvieh("");
-        rindvieh.setzePosition(rindviehTyp.getPosition().getX(), rindviehTyp.getPosition().getY());
+        rindvieh.setzePosition(new Position(rindviehTyp.getPosition().getX(), rindviehTyp.getPosition().getY()));
         acker.lassRindWeiden(rindvieh);
     }
 }

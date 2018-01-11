@@ -21,7 +21,6 @@ public class ObserverUnitTest {
 
     @Before
     public void setUp() {
-        PositionsElement.WARTEZEIT = 0;
         listener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -35,11 +34,11 @@ public class ObserverUnitTest {
         Acker acker = new Acker(10, 10);
         acker.fuegeBeobachterHinzu(listener);
 
-        acker.lassGrasWachsen(1, 1);
+        acker.lassGrasWachsen(new Position(1, 1));
         assertEquals(Acker.PROPERTY_GRAESER, evt.getPropertyName());
         assertEquals(true, evt.getNewValue() instanceof Gras);
 
-        acker.stelleEimerAuf(2, 2);
+        acker.stelleEimerAuf(new Position(2, 2));
         assertEquals(Acker.PROPERTY_EIMER, evt.getPropertyName());
         assertEquals(true, evt.getNewValue() instanceof Eimer);
 

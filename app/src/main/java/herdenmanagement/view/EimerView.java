@@ -10,8 +10,8 @@ import herdenmanagement.model.Eimer;
 
 public class EimerView extends PositionElementView {
 
-    public EimerView(Context context, Eimer eimer) {
-        super(context, eimer);
+    public EimerView(Context context, Animator animator, Eimer eimer) {
+        super(context, animator, eimer);
     }
 
     protected Bitmap getAktuellesBild() {

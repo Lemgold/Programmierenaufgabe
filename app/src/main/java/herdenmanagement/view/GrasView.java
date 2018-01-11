@@ -10,8 +10,8 @@ import herdenmanagement.model.Gras;
 
 public class GrasView extends PositionElementView {
 
-    public GrasView(Context context, Gras gras) {
-        super(context, gras);
+    public GrasView(Context context, Animator animator, Gras gras) {
+        super(context, animator, gras);
     }
 
     protected Bitmap getAktuellesBild() {

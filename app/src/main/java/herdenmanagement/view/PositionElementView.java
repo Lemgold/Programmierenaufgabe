@@ -1,6 +1,5 @@
 package herdenmanagement.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -26,6 +25,16 @@ import herdenmanagement.model.PositionsElement;
 public class PositionElementView extends AppCompatImageView implements PropertyChangeListener {
 
     /**
+     * Wartezeit für Bewegungen in ms
+     */
+    public static int WARTEZEIT = 500;
+
+    /**
+     * Animator für die Aktualisierung der GUI
+     */
+    private Animator animator;
+
+    /**
      * {@link PositionsElement}, welches hier dargestellt wird. Das {@link PositionsElement}
      * kennt seine View nicht, nur die View kennt ihr Modell.
      */
@@ -37,8 +46,10 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
      * @param context          Context der App
      * @param positionsElement Darzustellendes Element
      */
-    public PositionElementView(Context context, PositionsElement positionsElement) {
+    public PositionElementView(Context context, Animator animator, PositionsElement positionsElement) {
         super(context);
+
+        this.animator = animator;
 
         // PositionsElement merken und observieren
         this.positionsElement = positionsElement;
@@ -48,7 +59,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
 
         // Bild setzen
         setPadding(4, 4, 4, 4);
-        aktualisiereBild();
+        setImageBitmap(getAktuellesBild());
     }
 
     /**
@@ -67,55 +78,43 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
      */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
+
+        // Nachricht anzeigen
+        if (PositionsElement.PROPERTY_NACHRICHT.equals(evt.getPropertyName())) {
+            Object nachricht = evt.getNewValue();
+
+            // Ist die Nachricht ein String, wird dieser direkt angezeigt
+            if (nachricht instanceof String) {
+                Toast.makeText(getContext(), (String) evt.getNewValue(), Toast.LENGTH_LONG).show();
+            }
+
+            // Ist die Nachricht eine Zahl, wird sie zunächst als ID im Ressourcen-Bundle interpretiert
+            // Klappt das nicht, wird die Zahl gezeigt
+            if (nachricht instanceof Number) {
+                try {
+                    String text = getContext().getResources().getString(((Number) nachricht).intValue(), positionsElement.gibName());
+                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                } catch (Resources.NotFoundException e) {
+                    Toast.makeText(getContext(), "" + nachricht, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            return;
+        }
+
+        final Bitmap bitmap = getAktuellesBild();
+
+        // Bei Änderungen der Position, muss ein neues Layout berechnet werden
+        animator.performAction(new Animator.Action(WARTEZEIT) {
             @Override
             public void run() {
-
-                // Nachricht anzeigen
-                if (PositionsElement.PROPERTY_NACHRICHT.equals(evt.getPropertyName())) {
-                    Object nachricht = evt.getNewValue();
-
-                    // Ist die Nachricht ein String, wird dieser direkt angezeigt
-                    if (nachricht instanceof String) {
-                        Toast.makeText(getContext(), (String) evt.getNewValue(), Toast.LENGTH_LONG).show();
-                    }
-
-                    // Ist die Nachricht eine Zahl, wird sie zunächst als ID im Ressourcen-Bundle interpretiert
-                    // Klappt das nicht, wird die Zahl gezeigt
-                    if (nachricht instanceof Number) {
-                        try {
-                            String text = getContext().getResources().getString(((Number) nachricht).intValue(), positionsElement.gibName());
-                            Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
-                        } catch (Resources.NotFoundException e) {
-                            Toast.makeText(getContext(), "" + nachricht, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    return;
+                // image animiert setzen
+                if (getParent() instanceof ViewGroup) {
+                    TransitionManager.beginDelayedTransition((ViewGroup) getParent());
                 }
-
-                // Bei Änderungen der Position, muss ein neues Layout berechnet werden
-                if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
-                    // Bild aktualisieren
-                    aktualisiereBild();
-
-                    // neues Layout beantragen
-                    if (getParent() != null) {
-                        getParent().requestLayout();
-                    }
-
-                    return;
-                }
-
 
                 // Bild aktualisieren
-                aktualisiereBild();
-                // neu zeichnen veranlassen
-                invalidate();
-
-                if (getParent() != null) {
-                    getParent().requestLayout();
-                }
+                setImageBitmap(bitmap);
             }
         });
     }
@@ -128,19 +127,5 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
      */
     protected Bitmap getAktuellesBild() {
         return null;
-    }
-
-    /**
-     * Die Aktualsierung der Bilddarstellung erfolgt animiert.
-     */
-    protected void aktualisiereBild() {
-        Bitmap bitmap = getAktuellesBild();
-
-        // image animiert setzen
-        if (getParent() instanceof ViewGroup) {
-            TransitionManager.beginDelayedTransition((ViewGroup) getParent());
-        }
-
-        setImageBitmap(bitmap);
     }
 }

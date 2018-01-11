@@ -10,8 +10,8 @@ import herdenmanagement.model.Rindvieh;
 
 public class RindviehView extends PositionElementView {
 
-    public RindviehView(Context context, Rindvieh rindvieh) {
-        super(context, rindvieh);
+    public RindviehView(Context context, Animator animator, Rindvieh rindvieh) {
+        super(context, animator, rindvieh);
     }
 
     protected Bitmap getAktuellesBild() {

@@ -19,6 +19,7 @@ import herdenmanagement.model.Acker;
 import herdenmanagement.model.Eimer;
 import herdenmanagement.model.Gras;
 import herdenmanagement.model.Position;
+import herdenmanagement.model.PositionsElement;
 import herdenmanagement.model.Rindvieh;
 
 /**
@@ -32,6 +33,8 @@ import herdenmanagement.model.Rindvieh;
  */
 public class AckerView extends FrameLayout implements PropertyChangeListener {
 
+    private Animator animator;
+
     /**
      * Dargestellter Acker
      */
@@ -40,6 +43,8 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     public AckerView(Context context) {
         super(context);
         setWillNotDraw(false);
+
+        animator = new Animator(context);
     }
 
     /**
@@ -51,6 +56,8 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     public AckerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
+
+        animator = new Animator(context);
     }
 
     /**
@@ -63,6 +70,16 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     public AckerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWillNotDraw(false);
+
+        animator = new Animator(context);
+    }
+
+    public Animator.Threading getThreading() {
+        return animator.getThreading();
+    }
+
+    public void setThreading(Animator.Threading threading) {
+        animator.setThreading(threading);
     }
 
     /**
@@ -72,20 +89,33 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param acker Acker zur Ansicht
      */
     public void setAcker(Acker acker) {
+        // Wenn die View bereits mit einem verknüpft ist,
+        // wird diese Verknüpfiung jetzt aufgehoben
         if (this.acker != null) {
             this.acker.entferneBeobachter(this);
-            ((Activity) getContext()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    removeAllViews();
-                }
-            });
+
+            // add initial objects from acker
+            for (Rindvieh rindvieh : this.acker.getViecher()) {
+                aktualisiereViecher(rindvieh, null);
+            }
+
+            for (Eimer eimer : this.acker.getEimer()) {
+                aktualisiereEimer(eimer, null);
+            }
+
+            for (Gras gras : this.acker.getGraeser()) {
+                aktualisiereGraeser(gras, null);
+            }
         }
 
+        // Der neue Acker wird gespeichert
         this.acker = acker;
-        this.acker.fuegeBeobachterHinzu(this);
+        if (acker == null) {
+            return;
+        }
 
-        // add initial objects from acker
+        // Die Verknüpfung mit dem neuen Acker herstellen
+        this.acker.fuegeBeobachterHinzu(this);
         for (Rindvieh rindvieh : acker.getViecher()) {
             aktualisiereViecher(null, rindvieh);
         }
@@ -249,6 +279,17 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
             aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
         }
+
+        // Bei Änderungen der Position, muss ein neues Layout berechnet werden
+        if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
+            animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
+                @Override
+                public void run() {
+                    TransitionManager.beginDelayedTransition(AckerView.this);
+                    requestLayout();
+                }
+            });
+        }
     }
 
     /**
@@ -262,8 +303,10 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereGraeser(final Gras oldValue, final Gras newValue) {
         if (newValue != null && oldValue == null) {
-            addViewAmimated(new GrasView(getContext(), newValue));
+            newValue.fuegeBeobachterHinzu(this);
+            addViewAmimated(new GrasView(getContext(), animator, newValue));
         } else if (newValue == null && oldValue != null) {
+            oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
         }
     }
@@ -279,8 +322,10 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereViecher(final Rindvieh oldValue, final Rindvieh newValue) {
         if (newValue != null && oldValue == null) {
-            addViewAmimated(new RindviehView(getContext(), newValue));
+            newValue.fuegeBeobachterHinzu(this);
+            addViewAmimated(new RindviehView(getContext(), animator, newValue));
         } else if (newValue == null && oldValue != null) {
+            oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
         }
     }
@@ -296,8 +341,10 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      */
     private void aktualisiereEimer(final Eimer oldValue, final Eimer newValue) {
         if (newValue != null && oldValue == null) {
-            addViewAmimated(new EimerView(getContext(), newValue));
+            newValue.fuegeBeobachterHinzu(this);
+            addViewAmimated(new EimerView(getContext(), animator, newValue));
         } else if (newValue == null && oldValue != null) {
+            oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
         }
     }
@@ -306,7 +353,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param id Ressourcen-ID der zu entfernenden View
      */
     private void removeViewAnimated(final int id) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
+        animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
             @Override
             public void run() {
                 // fade out the view
@@ -330,7 +377,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param view Hinzufügende View
      */
     private void addViewAmimated(final View view) {
-        ((Activity) getContext()).runOnUiThread(new Runnable() {
+        animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
             @Override
             public void run() {
                 // langsam einblenden

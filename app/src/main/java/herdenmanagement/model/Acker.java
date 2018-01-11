@@ -8,13 +8,13 @@ import java.util.List;
  * Der Acker besteht aus einer Matrix an Feldern, auf denen {@link Eimer}, {@link Gras} und
  * Instanzen von {@link Rindvieh} platziert werden können. Der Acker beschränkt die Position
  * dieser Objekte mit seiner Größe.
- *
+ * <p>
  * Der Acker kann prüfen, ob einer bestimmten Position Gras wächst {@link #istDaGras} oder
  * ein Eimer steht {@link #istDaEinEimer(Position)}.
- *
+ * <p>
  * Wird ein Eimer, Gras oder ein Rindvieh hinzugefügt oder entfernt, informiert der Acker
  * seine Beobachter.
- *
+ * <p>
  * Im Muster Model View Controller sind Objekte dieser Klasse Bestandteil des Model. Der Acker
  * kann mit einer {@link herdenmanagement.view.AckerView} dargestellt werden.
  */
@@ -24,7 +24,7 @@ public class Acker extends BeobachtbaresElement {
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
-     *
+     * <p>
      * Der Schlüssel dient für Nachrichten zum Property {@link #viecher}.
      */
     public final static String PROPERTY_VIECHER = "herdenmanagement.model.Acker.viecher";
@@ -33,7 +33,7 @@ public class Acker extends BeobachtbaresElement {
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
-     *
+     * <p>
      * Der Schlüssel dient für Nachrichten zum Property {@link #eimer}.
      */
     public final static String PROPERTY_EIMER = "herdenmanagement.model.Acker.eimer";
@@ -42,7 +42,7 @@ public class Acker extends BeobachtbaresElement {
      * Schlüssel zur Kommunikation mit einem {@link PropertyChangeListener}.
      * Der Schlüssel wird als property der Methode {@link #informiereBeobachter(String, Object, Object)}
      * übergeben.
-     *
+     * <p>
      * Der Schlüssel dient für Nachrichten zum Property {@link #graeser}.
      */
     public final static String PROPERTY_GRAESER = "herdenmanagement.model.Acker.graeser";
@@ -98,16 +98,15 @@ public class Acker extends BeobachtbaresElement {
 
     /**
      * Erzeugt an der Position eine Instanz von {@link Gras}.
-     *
+     * <p>
      * Wird ein neues Gras auf dem Acker platziert, werden die Observer des Ackers informiert.
      *
-     * @param x X-Koordinate des Grases
-     * @param y Y-Koordinate des Graes
+     * @param position Position, an der Gras wachsen soll
      * @return Auf dem Acker eingefügtes Gras
      */
-    public Gras lassGrasWachsen(int x, int y) {
+    public Gras lassGrasWachsen(Position position) {
         Gras gras = new Gras();
-        gras.wachseUndGedeihe(this, new Position(x, y));
+        gras.wachseUndGedeihe(this, position);
         graeser.add(gras);
 
         informiereBeobachter(PROPERTY_GRAESER, null, gras);
@@ -116,10 +115,24 @@ public class Acker extends BeobachtbaresElement {
     }
 
     /**
+     * Erzeugt an der Position eine Instanz von {@link Gras}.
+     * <p>
+     * Wird ein neues Gras auf dem Acker platziert, werden die Observer des Ackers informiert.
+     *
+     * @param x X-Koordinate des Grases
+     * @param y Y-Koordinate des Graes
+     * @return Auf dem Acker eingefügtes Gras
+     */
+    @Deprecated
+    public Gras lassGrasWachsen(int x, int y) {
+        return lassGrasWachsen(new Position(x, y));
+    }
+
+    /**
      * Wenn ein Rind mit {@link herdenmanagement.model.Rindvieh#Rindvieh(String)} erzeugt wurde,
      * kann es auf einem Acker eingefügt werden. Jedes Rind hat nur einen Acker, ein Acker mehrere
      * Rinder.
-     *
+     * <p>
      * Wird ein neues Rind auf dem Acker platziert, werden die Observer des Ackers informiert.
      *
      * @param rind Rind, welches zukünftig hier weidet
@@ -134,21 +147,35 @@ public class Acker extends BeobachtbaresElement {
     /**
      * Stellt einen Eimer auf den Acker. Rinder können hier zukünftig
      * mit {@link Rindvieh#gibMilch()} Milch geben.
+     * <p>
+     * Wird ein neuer Eimer auf dem Acker platziert, werden die Observer des Ackers informiert.
      *
+     * @param position Position des aufzustellenden Eimers
+     * @return Auf dem Acker platzierter Eimer
+     */
+    public Eimer stelleEimerAuf(Position position) {
+        Eimer e = new Eimer();
+        e.positioniereDich(this, position);
+        eimer.add(e);
+
+        informiereBeobachter(PROPERTY_EIMER, null, e);
+
+        return e;
+    }
+
+    /**
+     * Stellt einen Eimer auf den Acker. Rinder können hier zukünftig
+     * mit {@link Rindvieh#gibMilch()} Milch geben.
+     * <p>
      * Wird ein neuer Eimer auf dem Acker platziert, werden die Observer des Ackers informiert.
      *
      * @param x X-Koordinate des Eimers
      * @param y Y-Koordinate des Eimers
      * @return Auf dem Acker platzierter Eimer
      */
+    @Deprecated
     public Eimer stelleEimerAuf(int x, int y) {
-        Eimer e = new Eimer();
-        e.positioniereDich(this, new Position(x, y));
-        eimer.add(e);
-
-        informiereBeobachter(PROPERTY_EIMER, null, e);
-
-        return e;
+        return stelleEimerAuf(new Position(x, y));
     }
 
     /**
@@ -210,14 +237,23 @@ public class Acker extends BeobachtbaresElement {
                 (position.y < zeilen);
     }
 
+    /**
+     * @return Liste der Rinder auf dem Acker
+     */
     public List<Rindvieh> getViecher() {
         return viecher;
     }
 
+    /**
+     * @return Liste der Eimer auf dem Acker
+     */
     public List<Eimer> getEimer() {
         return eimer;
     }
 
+    /**
+     * @return Liste der Gräser auf dem Acker
+     */
     public List<Gras> getGraeser() {
         return graeser;
     }

@@ -25,11 +25,6 @@ import herdenmanagement.model.PositionsElement;
 public class PositionElementView extends AppCompatImageView implements PropertyChangeListener {
 
     /**
-     * Wartezeit für Bewegungen in ms
-     */
-    public static int WARTEZEIT = 500;
-
-    /**
      * Animator für die Aktualisierung der GUI
      */
     private Animator animator;
@@ -105,7 +100,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
         final Bitmap bitmap = getAktuellesBild();
 
         // Bei Änderungen der Position, muss ein neues Layout berechnet werden
-        animator.performAction(new Animator.Action(WARTEZEIT) {
+        animator.performAction(new Animator.Action() {
             @Override
             public void run() {
                 // image animiert setzen

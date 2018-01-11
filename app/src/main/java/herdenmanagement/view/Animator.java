@@ -15,6 +15,11 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class Animator {
 
     /**
+     * Wartezeit für Bewegungen in ms
+     */
+    public static int WARTEZEIT = 500;
+
+    /**
      * Werden PositionsElemente mit Buttons bewegt, sollte der Animator im Modus
      * ASYNCHRONOUS betrieben werden. Dies stellt die Sichtbarkeit aller Aktionen sicher.
      */
@@ -89,6 +94,14 @@ public class Animator {
     public static abstract class Action implements Runnable {
 
         private int waitingTime;
+
+        /**
+         * Erzeugt eine Action. Die Wartezeit nach Ausführung der Action
+         * ist {@link Animator#WARTEZEIT}
+         */
+        public Action() {
+            this(Animator.WARTEZEIT);
+        }
 
         /**
          * Erzeugt eine Action

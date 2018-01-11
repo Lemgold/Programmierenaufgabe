@@ -1,6 +1,5 @@
 package herdenmanagement.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -282,7 +281,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
 
         // Bei Änderungen der Position, muss ein neues Layout berechnet werden
         if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
-            animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
+            animator.performAction(new Animator.Action() {
                 @Override
                 public void run() {
                     TransitionManager.beginDelayedTransition(AckerView.this);
@@ -304,7 +303,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     private void aktualisiereGraeser(final Gras oldValue, final Gras newValue) {
         if (newValue != null && oldValue == null) {
             newValue.fuegeBeobachterHinzu(this);
-            addViewAmimated(new GrasView(getContext(), animator, newValue));
+            addViewAmimated(new GrasView(getContext(), animator, newValue), false);
         } else if (newValue == null && oldValue != null) {
             oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
@@ -323,7 +322,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     private void aktualisiereViecher(final Rindvieh oldValue, final Rindvieh newValue) {
         if (newValue != null && oldValue == null) {
             newValue.fuegeBeobachterHinzu(this);
-            addViewAmimated(new RindviehView(getContext(), animator, newValue));
+            addViewAmimated(new RindviehView(getContext(), animator, newValue), true);
         } else if (newValue == null && oldValue != null) {
             oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
@@ -342,7 +341,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     private void aktualisiereEimer(final Eimer oldValue, final Eimer newValue) {
         if (newValue != null && oldValue == null) {
             newValue.fuegeBeobachterHinzu(this);
-            addViewAmimated(new EimerView(getContext(), animator, newValue));
+            addViewAmimated(new EimerView(getContext(), animator, newValue), false);
         } else if (newValue == null && oldValue != null) {
             oldValue.entferneBeobachter(this);
             removeViewAnimated(oldValue.gibId());
@@ -353,7 +352,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * @param id Ressourcen-ID der zu entfernenden View
      */
     private void removeViewAnimated(final int id) {
-        animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
+        animator.performAction(new Animator.Action() {
             @Override
             public void run() {
                 // fade out the view
@@ -375,9 +374,10 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
      * Fügt dem Acker eine neue Darstellung für Eimer, Gras, etc. hinzu
      *
      * @param view Hinzufügende View
+     * @param onTop true fürgt die View über alle anderen ein
      */
-    private void addViewAmimated(final View view) {
-        animator.performAction(new Animator.Action(PositionElementView.WARTEZEIT) {
+    private void addViewAmimated(final View view, final boolean onTop) {
+        animator.performAction(new Animator.Action() {
             @Override
             public void run() {
                 // langsam einblenden
@@ -385,7 +385,12 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
 
                 TransitionManager.beginDelayedTransition(AckerView.this);
                 view.setAlpha(1);
-                addView(view, 0);
+
+                if (onTop) {
+                    addView(view);
+                } else {
+                    addView(view, 0);
+                }
 
                 // layout anpassen?
                 requestLayout();

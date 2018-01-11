@@ -1,10 +1,8 @@
 package herdenmanagement;
 
-import android.view.View;
-import android.widget.Toast;
-
 import de.ba.herdenmanagement.R;
 import herdenmanagement.model.Acker;
+import herdenmanagement.model.Position;
 import herdenmanagement.model.Rindvieh;
 import herdenmanagement.view.AckerView;
 
@@ -30,37 +28,61 @@ import herdenmanagement.view.AckerView;
  * <p>
  * Die Klasse verknüpft im Wesentlichen einer {@link Acker} (= Model im MVC Muster) mit seiner
  * {@link AckerView} (= View im MVC Muster). Das Sie diese und andere Vorgänge
- * (insbesondere Änderungen auf Acker) organisiert, ist sie der COntroller im MVC Muster.
+ * (insbesondere Änderungen auf Acker) organisiert, ist sie der Controller im MVC Muster.
  */
 public class HerdenManager {
 
     /**
-     * Grafische Darstellung des Ackers
+     * Acker, auf dem nach Herzenslust geackert werden kasnn.
      */
-    private AckerView ackerView;
+    private Acker acker;
 
     /**
-     * Zu steuerndes Rindvieh
+     * Rindvieh, dass wirklich gern auf dem Acker steht und lustige Geräusche macht.
      */
     private Rindvieh vera;
 
     /**
-     * Diese Methode lässt Gras wachsen und Rinder weiden.
+     * Aufruf zur Erzeugung eines HerdenManagers.
+     * Diese Methode lässt zum Beispiel Gras wachsen und stellt Eimer auf.
+     * Die Einrichtung des Ackers wird nicht animiert dargestellt.
+     *
+     * @param mainActivity Hauptaktivität der App
      */
-    public void manageHerde(final MainActivity mainActivity) {
+    public void richteAckerEin(MainActivity mainActivity) {
+        // Die View, die die Acker Elememnte anzeigen kann, wird in der Datei
+        // res/activity_main.xml optisch ausgerichtet und in der App platziert
+        AckerView ackerView = (AckerView) mainActivity.findViewById(R.id.acker_view);
+
         // Acker erzeugen
-        Acker mcPom = new Acker(5, 7);
+        acker = new Acker(5, 7);
 
         // AckerView mit Acker verknüpfen
-        ackerView = (AckerView) mainActivity.findViewById(R.id.acker_view);
-        ackerView.setAcker(mcPom);
+        ackerView.setAcker(acker);
 
-        // Rinder erzeugen
-        vera = new Rindvieh("Vera");
-        mcPom.lassRindWeiden(vera);
+        // Acker befüllen
+        acker.lassGrasWachsen(new Position(1, 1));
+        acker.stelleEimerAuf(new Position(2, 2));
+        acker.lassGrasWachsen(new Position(2, 4));
+        acker.lassGrasWachsen(new Position(2, 5));
+        acker.lassGrasWachsen(new Position(3, 2));
+        acker.lassGrasWachsen(new Position(3, 4));
+    }
 
-        mcPom.lassGrasWachsen(1, 1);
-        mcPom.stelleEimerAuf(2, 2);
-        mcPom.lassGrasWachsen(2, 4);
+    /**
+     * Hier wird eine herde gemanagt. Und zwar professionell. Das bedeutet vor allem,
+     * dass Rinder bewegt und zum Fressen angehalten werden. Natürlich können Sie danach
+     * Milch geben!
+     * <p>
+     * Die Aktionen dieser Methoden werden animiert und nacheinander dargestellt. Man kann in der
+     * App also die Reihenfolge der Aktionen sehen (anders als die in
+     * {@link #richteAckerEin(MainActivity)}.
+     *
+     * @param mainActivity Hauptaktivität
+     */
+    public void manageHerde(final MainActivity mainActivity) {
+        vera = new Rindvieh("Meine Vera");
+        acker.lassRindWeiden(vera);
+
     }
 }

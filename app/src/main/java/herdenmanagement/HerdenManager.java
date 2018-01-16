@@ -26,8 +26,8 @@ import herdenmanagement.view.AckerView;
  * gemäß des Observer Muster. Wenn man also Veränderungen an einer Kuh vornimmt, wird diese
  * Ihre Beaobachter informieren und diese passen ihre grafische Darstellung an.
  * <p>
- * Die Klasse verknüpft im Wesentlichen einer {@link Acker} (= Model im MVC Muster) mit seiner
- * {@link AckerView} (= View im MVC Muster). Das Sie diese und andere Vorgänge
+ * Die Klasse verknüpft im Wesentlichen einen {@link Acker} (= Model im MVC Muster) mit seiner
+ * {@link AckerView} (= View im MVC Muster). Da sie diese und andere Vorgänge
  * (insbesondere Änderungen auf Acker) organisiert, ist sie der Controller im MVC Muster.
  */
 public class HerdenManager {
@@ -70,19 +70,22 @@ public class HerdenManager {
     }
 
     /**
-     * Hier wird eine herde gemanagt. Und zwar professionell. Das bedeutet vor allem,
+     * Hier wird eine Herde gemanagt. Und zwar professionell. Das bedeutet vor allem,
      * dass Rinder bewegt und zum Fressen angehalten werden. Natürlich können Sie danach
      * Milch geben!
      * <p>
      * Die Aktionen dieser Methoden werden animiert und nacheinander dargestellt. Man kann in der
-     * App also die Reihenfolge der Aktionen sehen (anders als die in
+     * App also die Reihenfolge der Aktionen sehen (anders als die Aktionen in
      * {@link #richteAckerEin(MainActivity)}.
      *
      * @param mainActivity Hauptaktivität
      */
     public void manageHerde(final MainActivity mainActivity) {
-        vera = new Rindvieh("Meine Vera");
+        vera = new Rindvieh("Vera Vollmilch");
         acker.lassRindWeiden(vera);
 
+        vera.geheVor();
+        vera.geheVor();
+        vera.geheVor();
     }
 }

@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -332,10 +331,6 @@ public class MainActivity extends Activity {
         } catch (Throwable t) {
             Log.wtf("error reading xml file", t);
         }
-    }
-
-    public void geheVor(View view) {
-        herdenManager.geheVor();
     }
 }
 

@@ -80,7 +80,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
 
             // Ist die Nachricht ein String, wird dieser direkt angezeigt
             if (nachricht instanceof String) {
-                Toast.makeText(getContext(), (String) evt.getNewValue(), Toast.LENGTH_LONG).show();
+                toast((String) evt.getNewValue());
             }
 
             // Ist die Nachricht eine Zahl, wird sie zunächst als ID im Ressourcen-Bundle interpretiert
@@ -88,9 +88,9 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
             if (nachricht instanceof Number) {
                 try {
                     String text = getContext().getResources().getString(((Number) nachricht).intValue(), positionsElement.gibName());
-                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+                    toast(text);
                 } catch (Resources.NotFoundException e) {
-                    Toast.makeText(getContext(), "" + nachricht, Toast.LENGTH_LONG).show();
+                    toast("" + nachricht);
                 }
             }
 
@@ -110,6 +110,21 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
 
                 // Bild aktualisieren
                 setImageBitmap(bitmap);
+            }
+        });
+    }
+
+    /**
+     * Zeigt den Toast mittels Animator, dadurch wird auch stets der
+     * UI Thread zur Anzeige verwendet.
+     *
+     * @param text Anzuzeigender Text
+     */
+    private void toast(final String text) {
+        animator.performAction(new Animator.Action() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -44,8 +44,7 @@ public class Animator {
     /**
      * Liste von Actions, die nacheinander abgearbeitet werden
      */
-    private Queue<Action> actions = new ArrayBlockingQueue<Action>(1024);
-
+    private Queue<Action> actions = new ArrayBlockingQueue<>(1024);
 
     /**
      * Erzeugt einen Animator im gegeben Context (= In der Ragel die MainActivity)
@@ -53,7 +52,9 @@ public class Animator {
      * @param context Context der aktuellen App
      */
     public Animator(Context context) {
-        this.context = (Activity) context;
+        if (context instanceof Activity) {
+            this.context = (Activity) context;
+        }
     }
 
     /**
@@ -130,7 +131,7 @@ public class Animator {
     /**
      * Fügt eine Action hinzu
      *
-     * @param action
+     * @param action Auszuführende Aktion
      */
     public void performAction(Action action) {
         if (threading == Threading.ASYNCHRONOUS || threading == Threading.ASYNCHRONOUS_NO_WAIT) {

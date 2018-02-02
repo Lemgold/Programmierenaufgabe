@@ -7,6 +7,13 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
+ * Der Animator versieht die Statusänderung von Objekten mit einer Animation. Ändert eine
+ * View zum Beispiel Ihre Position, sorgt der Animator für einen sanften Übergang. Der Nutzer
+ * erhält den Eindruck, dass die View sich tatsächlich langsam zu den neuen Koordianten bewegt.
+ * <P>
+ * Ein Animator wird folgerichtig den View Klassen (@see {@link PositionElementView} im
+ * HerdenManagement zugewiesen und von der {@link AckerView} erzeugt und verwaltet.
+ * <P>
  * Die Methoden des Klassen aus dem Paket herdenmanagement.model laufen in einem Thread,
  * der von den Methoden der Klassen aus dem Paket herdenmanagement.view losgelöst ist.
  * Der Grund liegt in der Tatsache begründet, dass Änderungen am Layout nur im

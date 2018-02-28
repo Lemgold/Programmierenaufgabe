@@ -363,11 +363,18 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
             public void run() {
                 // fade out the view
                 View v = findViewById(id);
+
+                // avoid NPE
+                if (v == null) {
+                    return;
+                }
+
+                // fade out
                 TransitionManager.beginDelayedTransition(AckerView.this);
                 v.setAlpha(0);
 
                 // remove the view
-                removeView(findViewById(id));
+                removeView(v);
 
                 // layout anpassen?
                 requestLayout();

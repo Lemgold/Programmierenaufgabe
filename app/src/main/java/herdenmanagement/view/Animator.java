@@ -165,6 +165,10 @@ public class Animator {
                     if (!actions.isEmpty()) {
                         Action action = actions.poll();
 
+                        if (action == null) {
+                            continue;
+                        }
+
                         // perform the action
                         context.runOnUiThread(action);
 

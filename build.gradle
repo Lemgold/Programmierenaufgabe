@@ -5,9 +5,10 @@ buildscript {
         // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter-cache/" }
         // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter/" }
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.1.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,6 +20,7 @@ allprojects {
         // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter-cache/" }
         // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter/" }
         jcenter()
+        google()
     }
 }
 

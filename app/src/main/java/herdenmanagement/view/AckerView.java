@@ -189,15 +189,19 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
         setMeasuredDimension((int) width, (int) height);
     }
 
+    /**
+     * Paint to draw a text. Reused in {@link #onDraw(Canvas)}
+     */
     private static TextPaint TEXT_PAINT = new TextPaint();
-
     static {
         TEXT_PAINT.setTextSize(40);
         TEXT_PAINT.setColor(Color.LTGRAY);
     }
 
+    /**
+     * Paint to draw lines. Reused in {@link #onDraw(Canvas)}
+     */
     private static Paint PAINT = new Paint();
-
     static {
         PAINT.setColor(Color.WHITE);
         PAINT.setStrokeWidth(6);

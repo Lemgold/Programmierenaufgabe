@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 // Während manageHerde möchten wir alle Aktionen sehen
-                AckerView ackerView = (AckerView)findViewById(R.id.acker_view);
+                AckerView ackerView = findViewById(R.id.acker_view);
 
                 // Acker einrichten, dies soll in einem "Rutsch" passieren,
                 // die einzelnen Aktionen werden nicht animiert
@@ -113,7 +113,7 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(newConfig);
 
         // Den Acker der aktuellen AckerView ermitteln
-        AckerView ackerView = (AckerView)findViewById(R.id.acker_view);
+        AckerView ackerView = findViewById(R.id.acker_view);
         Acker acker = ackerView.getAcker();
 
         Animator.Threading currentThreading = ackerView.getThreading();
@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 
         // Die AckerView dürfte sich durch die vorhergehende Anweisung geändert haben
         // Diese wird zukünftig vom vorhandenen Acker genutzt
-        ackerView = (AckerView)findViewById(R.id.acker_view);
+        ackerView = findViewById(R.id.acker_view);
         ackerView.setThreading(Animator.Threading.ASYNCHRONOUS_NO_WAIT);
         ackerView.setAcker(acker);
 

@@ -52,7 +52,7 @@ public class HerdenManager {
     public void richteAckerEin(MainActivity mainActivity) {
         // Die View, die die Acker Elememnte anzeigen kann, wird in der Datei
         // res/activity_main.xml optisch ausgerichtet und in der App platziert
-        AckerView ackerView = (AckerView) mainActivity.findViewById(R.id.acker_view);
+        AckerView ackerView = mainActivity.findViewById(R.id.acker_view);
 
         // Acker erzeugen
         acker = new Acker(5, 7);

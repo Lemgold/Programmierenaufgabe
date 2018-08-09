@@ -16,8 +16,8 @@ import herdenmanagement.model.Rindvieh;
 
 public class ObserverUnitTest {
 
-    PropertyChangeEvent evt;
-    PropertyChangeListener listener;
+    private PropertyChangeEvent evt;
+    private PropertyChangeListener listener;
 
     @Before
     public void setUp() {

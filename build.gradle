@@ -2,8 +2,6 @@
 
 buildscript {
     repositories {
-        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter-cache/" }
-        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter/" }
         jcenter()
         google()
     }
@@ -17,10 +15,10 @@ buildscript {
 
 allprojects {
     repositories {
-        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter-cache/" }
-        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/jcenter/" }
         jcenter()
         google()
+
+        buildDir "${System.env.TEMP}/${rootProject.name}/${project.name}"
     }
 }
 

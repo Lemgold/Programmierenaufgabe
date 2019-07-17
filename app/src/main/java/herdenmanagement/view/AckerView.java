@@ -32,6 +32,9 @@ import herdenmanagement.model.Rindvieh;
  */
 public class AckerView extends FrameLayout implements PropertyChangeListener {
 
+    /**
+     * Versieht die Statusänderung von Objekten mit einer Animation
+     */
     private Animator animator;
 
     /**

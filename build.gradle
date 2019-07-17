@@ -2,11 +2,14 @@
 
 buildscript {
     repositories {
-        jcenter()
+        // replaces jcenter() and google()
+        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
+        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
         google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.4.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,8 +18,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        google()
+        // replaces jcenter() and google()
+        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
+        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
 
         buildDir "${System.env.TEMP}/${rootProject.name}/${project.name}"
     }

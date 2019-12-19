@@ -12,12 +12,28 @@ import de.ba.herdenmanagement.R;
 
 import herdenmanagement.model.Rindvieh;
 
+/**
+ * Die Klasse erbt von {@link PositionElementView} und überschreibt die dortige
+ * Methode {@link #getAktuellesBild()}, um ein Rindvieh darzustellen. Da das Rind in
+ * verschiedene Richtungen schauen kann, ist die Klasse komplizierter aufgebaut
+ * als zum beispiel die {@link EimerView}.
+ */
 public class RindviehView extends PositionElementView {
 
+    /**
+     * Ruft den geerbeten Constructor auf
+     *
+     * @param context Context der Android App, entspricht i.d.R. der {@link herdenmanagement.MainActivity}
+     * @param animator Animation der grafischen Darstellungen
+     * @param rindvieh Dargestelltes Element
+     */
     public RindviehView(Context context, Animator animator, Rindvieh rindvieh) {
         super(context, animator, rindvieh);
     }
 
+    /**
+     * @return Bild einer Kuh, die in die richtige Richtung schaut
+     */
     protected Bitmap getAktuellesBild() {
         if (Rindvieh.StatusTyp.FRISST.equals(getRindvieh().gibStatus())) {
             return BitmapFactory.decodeResource(getContext().getResources(), R.drawable.kuh_gras);
@@ -38,6 +54,9 @@ public class RindviehView extends PositionElementView {
         return null;
     }
 
+    /**
+     * @return Von dieser Klasse dargestelltes {@link Rindvieh}
+     */
     public Rindvieh getRindvieh() {
         return (Rindvieh) getPositionsElement();
     }

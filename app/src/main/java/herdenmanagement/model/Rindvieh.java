@@ -7,14 +7,14 @@ import de.ba.herdenmanagement.R;
 
 /**
  * Ein Rindvieh kann sich auf einem {@link Acker} bewegen. Hierzu erbt es die Eigenschaft,
- * eine Position auf einem Acker zu besitzen von {@link PositionsElement}. Zusätlich kann
+ * eine Position auf einem Acker zu besitzen von {@link PositionsElement}. Zusätzlich kann
  * eine Kuh diese Position aber auch ändern, zum Beispiel mit {@link #geheVor()}.
  * <p>
  * Es wird sichergestellt, dass die Kuh nicht über den Rand des Ackers hinaus gehen kann.
  * Ist ein Zielfeld der Bewegung ungültig, speichert die Kuh eine Nachricht mittels
  * {@link PositionsElement#setzeNachricht(String)}.
  * <p>
- * Im Muster Model View Controller sind Objekte dieser Klasse Bestandteil des Model.
+ * Im Muster Model View Controller (MVC) sind Objekte dieser Klasse Bestandteil des Model.
  * Die beobachtete Kuh bietet einen Mechanismus, um Beobachter
  * mit {@link #fuegeBeobachterHinzu(PropertyChangeListener)}
  * an- und mit {@link #entferneBeobachter(PropertyChangeListener)} abzumelden und diese
@@ -78,7 +78,7 @@ public class Rindvieh extends PositionsElement {
     private StatusTyp status;
 
     /**
-     * Mögliche Richtungen, in die die Kuh schauen kann
+     * Mögliche Richtungen, in die die Kuh schauen kann, wichtig für die Anzeige von Bildern
      */
     public enum RichtungsTyp {NORD, OST, SUED, WEST}
 
@@ -124,7 +124,7 @@ public class Rindvieh extends PositionsElement {
 
     /**
      * Prüft die Milchmenge im Euter. Natürlich wird diese nicht während der Prüfung reduziert.
-     * Dies ist nur mit {@link #gibMilch()} möglich.
+     * Dies ist nur mit {@link #gibMilch()} oder {@link #frissGras()} möglich.
      *
      * @return Anzahl Milch im Euter
      */
@@ -148,7 +148,7 @@ public class Rindvieh extends PositionsElement {
     }
 
     /**
-     * Liefert die Richtung, in die der Kopf der Kuh zeigt. Bei Erzeugt einer Kuh schaut diese
+     * Liefert die Richtung, in die der Kopf der Kuh zeigt. Bei Erzeugung einer Kuh schaut diese
      * nach {@link RichtungsTyp#OST}.
      *
      * @return Blickrichtung der Kuh
@@ -180,6 +180,18 @@ public class Rindvieh extends PositionsElement {
     protected Position gibNaechstePosition(boolean vor) {
         Position position = gibPosition();
 
+        // Das ? steht für eine bedingte Zuweisung. Die Zeile
+        //
+        //     position.y = position.y + (vor ? -1 : 1);
+        //
+        // kann übersetzt werden in:
+        //
+        //     if (vor) {
+        //         position.y = position.y + -1;
+        //     } else {
+        //         position.y = position.y + 1;
+        //     }
+        //
         switch (gibRichtung()) {
             case NORD:
                 position.y = position.y + (vor ? -1 : 1);
@@ -364,7 +376,7 @@ public class Rindvieh extends PositionsElement {
 
     /**
      * Bei der Rückwärtsbewegung darf die Kuh nicht die Grenzen des Ackers
-     * überschreiten. Diese werden hier geprüft. Die eigentliche Prüfung erfolgt durch
+     * überschreiten. Diese Grenzen werden hier geprüft. Die eigentliche Prüfung erfolgt durch
      * {@link Acker#istPositionGueltig(Position)}.
      *
      * @return true = Bewegung ist möglich

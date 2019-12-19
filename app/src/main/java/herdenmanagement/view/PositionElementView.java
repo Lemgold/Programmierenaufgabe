@@ -15,9 +15,9 @@ import herdenmanagement.model.PositionsElement;
 
 /**
  * Basisklasse für die Darstellung von Eimer, Kühen, etc. Diese View kann auf Änderungen
- * an den Properties ihres PositionsElements reagieren, in der regel durch Anpassung der Anzeige.
+ * an den Properties ihres PositionsElements reagieren, in der Regel durch Anpassung der Anzeige.
  * <p>
- * Im Muster Model View Controller sind Objekte dieser Klasse Bestandteil des Model.
+ * Im Muster Model View Controller (MVC) sind Objekte dieser Klasse Bestandteil des Model.
  * <p>
  * Im Muster Obersever ist die Klasse ein ConcreteObserer, der PropertyChangeListener
  * ist das implementierte Observer Interface.

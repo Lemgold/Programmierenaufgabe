@@ -5,7 +5,6 @@ buildscript {
         // replaces jcenter() and google()
         maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
         maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
-        google()
     }
 
     dependencies {

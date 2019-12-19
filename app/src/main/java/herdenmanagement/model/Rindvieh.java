@@ -11,8 +11,8 @@ import de.ba.herdenmanagement.R;
  * eine Kuh diese Position aber auch ändern, zum Beispiel mit {@link #geheVor()}.
  * <p>
  * Es wird sichergestellt, dass die Kuh nicht über den Rand des Ackers hinaus gehen kann.
- * Ist ein Zielfeld der Bewegung ungültig, speichert die Kuh eine Nachricht in der Eigenschaft
- * {@link #nachricht}.
+ * Ist ein Zielfeld der Bewegung ungültig, speichert die Kuh eine Nachricht mittels
+ * {@link PositionsElement#setzeNachricht(String)}.
  * <p>
  * Im Muster Model View Controller sind Objekte dieser Klasse Bestandteil des Model.
  * Die beobachtete Kuh bietet einen Mechanismus, um Beobachter
@@ -21,8 +21,8 @@ import de.ba.herdenmanagement.R;
  * über Änderungen mittels {@link PropertyChangeListener#propertyChange(PropertyChangeEvent)}
  * zu informieren.
  * <p>
- * Eigenschaften, die beobachtet werden können sind die des PositionsElements sowie
- * {@link #nachricht}, {@link #richtung}, {@link #status} und {@link #milchImEuter}.
+ * Eigenschaften, die beobachtet werden können sind die Nachrichten des PositionsElements
+ * sowie {@link #richtung}, {@link #status} und {@link #milchImEuter}.
  */
 public class Rindvieh extends PositionsElement {
 
@@ -230,7 +230,7 @@ public class Rindvieh extends PositionsElement {
      * {@link RichtungsTyp#OST}, so wird sie nach dem Aufruf dieser Methoden nach
      * {@link RichtungsTyp#NORD} schauen.
      *
-     * Die {@link #position} der Kuh ändert sich durch die Drehbewegung nicht.
+     * Die {@link #gibPosition()} der Kuh ändert sich durch die Drehbewegung nicht.
      */
     public void dreheDichLinksRum() {
         if (gibRichtung() == RichtungsTyp.OST) {
@@ -251,7 +251,7 @@ public class Rindvieh extends PositionsElement {
      * {@link RichtungsTyp#OST}, so wird sie nach dem Aufruf dieser Methoden nach
      * {@link RichtungsTyp#SUED} schauen.
      *
-     * Die {@link #position} der Kuh ändert sich durch die Drehbewegung nicht.
+     * Die {@link #gibPosition()} der Kuh ändert sich durch die Drehbewegung nicht.
      */
     public void dreheDichRechtsRum() {
         if (gibRichtung() == RichtungsTyp.OST) {
@@ -283,8 +283,8 @@ public class Rindvieh extends PositionsElement {
     /**
      * Der Hauptzweck von {@link Gras} ist es, von Kühen gefressen zu werden. Die Kuh prüft
      * zunächst, ob an der aktuellen Position (Abfrage mit {@link #gibPosition()}) Gras wächst.
-     * Wenn ja, wird dies gefressen (also auch vom Acker entfernt). Wenn nein, speichert die Kuh
-     * eine Fehlermeldung im Attribut {@link #nachricht}.
+     * Wenn ja, wird dies gefressen (also auch vom Acker entfernt). Wenn nein, setzt die Kuh
+     * eine Fehlermeldung mittels {@link #setzeNachricht(String)}.
      */
     public void frissGras() {
         if (gibAcker().istDaGras(gibPosition())) {
@@ -300,8 +300,8 @@ public class Rindvieh extends PositionsElement {
     /**
      * Steht an der aktuellen Position auf dem {@link Acker} auch ein {@link Eimer}, kann die
      * Kuh gemolken werden. Nach dem Melken ist die Anzahl in {@link #milchImEuter} natürlich 0.
-     * Soll eine Kuh ohne Milch im Euter gemolken werden, wird auch eine Fehlernachricht im
-     * Attribut {@link #nachricht} gespeichert.
+     * Soll eine Kuh ohne Milch im Euter gemolken werden, wird auch eine Fehlernachricht mittels
+     * {@link #setzeNachricht(String)} gespeichert.
      *
      * Die Oberserver werden über die Reduzierung der Milchmenge informiert. Zusätzlich wird
      * der Erfolg oder Nicht-Erfolg des melkens als Nachricht gespeichert.

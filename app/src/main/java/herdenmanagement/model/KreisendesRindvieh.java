@@ -111,10 +111,10 @@ public class KreisendesRindvieh extends Rindvieh implements Runnable {
 
         // Kleinste und größte Position während der Kreisbewegung berechnen
         Position kleinstePosition = new Position(x - 1, y - 1);
-        Position größtePosition = new Position(x + 1, y + 1);
+        Position groesstePosition = new Position(x + 1, y + 1);
 
         // Sind diese Positionen möglich?
-        if (gibAcker().istPositionGueltig(kleinstePosition) && gibAcker().istPositionGueltig(größtePosition)) {
+        if (gibAcker().istPositionGueltig(kleinstePosition) && gibAcker().istPositionGueltig(groesstePosition)) {
             // Das setzt die Kreisbewegung fort
             kurzUnterbrechen = false;
         } else {

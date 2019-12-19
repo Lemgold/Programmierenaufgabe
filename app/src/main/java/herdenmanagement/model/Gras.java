@@ -8,7 +8,7 @@ public class Gras extends PositionsElement {
 
     /**
      * Er sprach "Wachse und gedeihe" und es wuchs und gedieh. Die Methode
-     * verknüpft das Gras mit dem Acker (siehe {@link Acker#graeser}) und setzt
+     * verknüpft das Gras mit dem Acker (siehe {@link Acker#getGraeser()}) und setzt
      * die Position für das Gras. Eine Prüfung der Position erfolgt nicht.
      * Theoretisch kann man also auch Gras außerhalb des Ackers platzieren.
      * Aber warum?

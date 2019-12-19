@@ -240,8 +240,8 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
                     TEXT_PAINT.getTextBounds(text, 0, text.length(), TEXT_RECT);
                     canvas.drawText(
                             text,
-                            (x + 0.5f) * columnWidth - TEXT_RECT.width() / 2,
-                            (y + 0.5f) * rowHeight + TEXT_RECT.height() / 2,
+                            ((x + 0.5f) * columnWidth) - (TEXT_RECT.width() / 2.0f),
+                            ((y + 0.5f) * rowHeight) + (TEXT_RECT.height() / 2.0f),
                             TEXT_PAINT);
                 }
             }

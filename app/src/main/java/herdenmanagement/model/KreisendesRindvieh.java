@@ -1,5 +1,7 @@
 package herdenmanagement.model;
 
+import android.os.SystemClock;
+
 /**
  * Ein KreisendesRindvieh erbt alle Eigenschaften der Klasse {@link Rindvieh}. Es bewegt sich
  * durch einen eigenen {@link Thread} permanent im Kreis um einen Ursprung.
@@ -69,11 +71,7 @@ public class KreisendesRindvieh extends Rindvieh implements Runnable {
                 int j = 0;
                 while ((j < 2) && (!mussAufhoeren)) {
                     while (kurzUnterbrechen) {
-                        // sleep 50ms
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException ignored) {
-                        }
+                        SystemClock.sleep(50);
                     }
 
                     // Der eigentliche Schritt

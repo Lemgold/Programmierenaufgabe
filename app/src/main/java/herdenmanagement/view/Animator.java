@@ -2,6 +2,7 @@ package herdenmanagement.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.SystemClock;
 
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -84,10 +85,7 @@ public class Animator {
             // alle Aktionen abarbeiten
             if (running) {
                 while (!actions.isEmpty()) {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ignored) {
-                    }
+                    SystemClock.sleep(10);
                 }
             }
 
@@ -128,10 +126,7 @@ public class Animator {
                 return;
             }
 
-            try {
-                Thread.sleep(waitingTime);
-            } catch (InterruptedException ignored) {
-            }
+            SystemClock.sleep(waitingTime);
         }
     }
 
@@ -178,10 +173,7 @@ public class Animator {
                         }
                     }
 
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ignored) {
-                    }
+                    SystemClock.sleep(10);
                 }
             }
         }).start();

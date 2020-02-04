@@ -104,10 +104,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
         else if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
             // remeber current LayoutParams
             AckerView ackerView = (AckerView) getParent();
-            FrameLayout.LayoutParams source = getLayoutParams(ackerView.getWidth(), ackerView.getHeight());
-
-            // animate with these params
-            final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(source);
+            final FrameLayout.LayoutParams lp = getLayoutParams(ackerView.getWidth(), ackerView.getHeight());
 
             // Bei Änderungen der Position, muss ein neues Layout berechnet werden
             animator.performAction(new Animator.Action() {
@@ -118,8 +115,8 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
                         TransitionManager.beginDelayedTransition((ViewGroup) getParent());
                     }
 
-                    // animierter Positionswechsel
-                    animate().translationX(lp.leftMargin - getLeft()).translationY(lp.topMargin - getTop()).start();
+                    // Position setzen
+                    setLayoutParams(lp);
                 }
             });
         } else {
@@ -144,7 +141,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
     /**
      * @param width Breite der übergeordneten AckerView
      * @param height Höhe der übergeordneten AckerView
-     * @return LayotParams (left / right / top / bottom) basierend auf PositionsElement und AckerView
+     * @return Kopie der aktuellen LayoutParams (left / right / top / bottom) basierend auf PositionsElement und AckerView
      */
     @NonNull
     public FrameLayout.LayoutParams getLayoutParams(float width, float height) {
@@ -159,12 +156,14 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
 
         // LayoutParams for child
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
-        lp.width = (int) columnWidth;
-        lp.height = (int) rowHeight;
-        lp.leftMargin = (int) (position.x * columnWidth);
-        lp.topMargin = (int) (position.y * rowHeight);
+        FrameLayout.LayoutParams result = new FrameLayout.LayoutParams(lp);
 
-        return lp;
+        result.width = (int) columnWidth;
+        result.height = (int) rowHeight;
+        result.leftMargin = (int) (position.x * columnWidth);
+        result.topMargin = (int) (position.y * rowHeight);
+
+        return result;
     }
 
     /**

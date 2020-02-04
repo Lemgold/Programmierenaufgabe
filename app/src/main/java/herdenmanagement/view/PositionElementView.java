@@ -3,14 +3,18 @@ package herdenmanagement.view;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.transition.TransitionManager;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import herdenmanagement.model.Acker;
+import herdenmanagement.model.Position;
 import herdenmanagement.model.PositionsElement;
 
 /**
@@ -94,24 +98,73 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
                 }
             }
 
-            return;
         }
 
-        final Bitmap bitmap = getAktuellesBild();
-
         // Bei Änderungen der Position, muss ein neues Layout berechnet werden
-        animator.performAction(new Animator.Action() {
-            @Override
-            public void run() {
-                // image animiert setzen
-                if (getParent() instanceof ViewGroup) {
-                    TransitionManager.beginDelayedTransition((ViewGroup) getParent());
-                }
+        else if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
+            // remeber current LayoutParams
+            AckerView ackerView = (AckerView) getParent();
+            FrameLayout.LayoutParams source = getLayoutParams(ackerView.getWidth(), ackerView.getHeight());
 
-                // Bild aktualisieren
-                setImageBitmap(bitmap);
-            }
-        });
+            // animate with these params
+            final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(source);
+
+            // Bei Änderungen der Position, muss ein neues Layout berechnet werden
+            animator.performAction(new Animator.Action() {
+                @Override
+                public void run() {
+                    // image animiert setzen
+                    if (getParent() instanceof ViewGroup) {
+                        TransitionManager.beginDelayedTransition((ViewGroup) getParent());
+                    }
+
+                    // animierter Positionswechsel
+                    animate().translationX(lp.leftMargin - getLeft()).translationY(lp.topMargin - getTop()).start();
+                }
+            });
+        } else {
+            final Bitmap bitmap = getAktuellesBild();
+
+            // Bei Änderungen der Position, muss ein neues Layout berechnet werden
+            animator.performAction(new Animator.Action() {
+                @Override
+                public void run() {
+                    // image animiert setzen
+                    if (getParent() instanceof ViewGroup) {
+                        TransitionManager.beginDelayedTransition((ViewGroup) getParent());
+                    }
+
+                    // Bild aktualisieren
+                    setImageBitmap(bitmap);
+                }
+            });
+        }
+    }
+
+    /**
+     * @param width Breite der übergeordneten AckerView
+     * @param height Höhe der übergeordneten AckerView
+     * @return LayotParams (left / right / top / bottom) basierend auf PositionsElement und AckerView
+     */
+    @NonNull
+    public FrameLayout.LayoutParams getLayoutParams(float width, float height) {
+        Acker acker = getPositionsElement().gibAcker();
+        Position position = getPositionsElement().gibPosition();
+
+        int columns = acker == null ? 0 : acker.zaehleSpalten();
+        float columnWidth = (int) (width / columns);
+
+        int rows = acker == null ? 0 : acker.zaehleZeilen();
+        float rowHeight = (int) (height / rows);
+
+        // LayoutParams for child
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
+        lp.width = (int) columnWidth;
+        lp.height = (int) rowHeight;
+        lp.leftMargin = (int) (position.x * columnWidth);
+        lp.topMargin = (int) (position.y * rowHeight);
+
+        return lp;
     }
 
     /**

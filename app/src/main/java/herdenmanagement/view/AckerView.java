@@ -17,8 +17,6 @@ import java.beans.PropertyChangeListener;
 import herdenmanagement.model.Acker;
 import herdenmanagement.model.Eimer;
 import herdenmanagement.model.Gras;
-import herdenmanagement.model.Position;
-import herdenmanagement.model.PositionsElement;
 import herdenmanagement.model.Rindvieh;
 
 /**
@@ -159,15 +157,8 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
             height = 0;
         }
 
-        int columns = acker == null ? 0 : acker.zaehleSpalten();
-        float columnWidth = (int) (width / columns);
-
-        int count = getChildCount();
-        int rows = acker == null ? 0 : acker.zaehleZeilen();
-        float rowHeight = (int) (height / rows);
-
         // set LayoutParams for all childs
-        for (int i = 0; i < count; i++) {
+        for (int i = 0, count = getChildCount(); i < count; i++) {
             // check the class, avoid ClassCastExceptions for
             // custom child views
             if (!(getChildAt(i) instanceof PositionElementView)) {
@@ -175,14 +166,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
             }
 
             PositionElementView child = (PositionElementView) getChildAt(i);
-            Position position = child.getPositionsElement().gibPosition();
-
-            // set LayoutParams for child
-            final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            lp.width = (int) columnWidth;
-            lp.height = (int) rowHeight;
-            lp.leftMargin = (int) (position.x * columnWidth);
-            lp.topMargin = (int) (position.y * rowHeight);
+            LayoutParams lp = child.getLayoutParams(width, height);
 
             // set exact size for child
             child.measure(lp.width | MeasureSpec.EXACTLY, lp.height | MeasureSpec.EXACTLY);
@@ -290,17 +274,6 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
 
         if (Acker.PROPERTY_GRAESER.equals(evt.getPropertyName())) {
             aktualisiereGraeser((Gras) evt.getOldValue(), (Gras) evt.getNewValue());
-        }
-
-        // Bei Änderungen der Position, muss ein neues Layout berechnet werden
-        if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
-            animator.performAction(new Animator.Action() {
-                @Override
-                public void run() {
-                    TransitionManager.beginDelayedTransition(AckerView.this);
-                    requestLayout();
-                }
-            });
         }
     }
 

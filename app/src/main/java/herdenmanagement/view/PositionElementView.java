@@ -104,7 +104,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
         else if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
             // remeber current LayoutParams
             AckerView ackerView = (AckerView) getParent();
-            final FrameLayout.LayoutParams lp = getLayoutParams(ackerView.getWidth(), ackerView.getHeight());
+            final FrameLayout.LayoutParams lp = calculateLayoutParams(ackerView.getWidth(), ackerView.getHeight());
 
             // Bei Änderungen der Position, muss ein neues Layout berechnet werden
             animator.performAction(new Animator.Action() {
@@ -144,7 +144,7 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
      * @return Kopie der aktuellen LayoutParams (left / right / top / bottom) basierend auf PositionsElement und AckerView
      */
     @NonNull
-    public FrameLayout.LayoutParams getLayoutParams(float width, float height) {
+    public FrameLayout.LayoutParams calculateLayoutParams(float width, float height) {
         Acker acker = getPositionsElement().gibAcker();
         Position position = getPositionsElement().gibPosition();
 

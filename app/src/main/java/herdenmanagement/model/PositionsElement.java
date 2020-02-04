@@ -166,7 +166,7 @@ public class PositionsElement extends BeobachtbaresElement {
     /**
      * @return Acker, auf dem das Element positioniert wurde.
      */
-    protected Acker gibAcker() {
+    public Acker gibAcker() {
         return acker;
     }
 

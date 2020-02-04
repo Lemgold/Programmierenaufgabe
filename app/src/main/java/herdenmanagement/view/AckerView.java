@@ -166,7 +166,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
             }
 
             PositionElementView child = (PositionElementView) getChildAt(i);
-            LayoutParams lp = child.getLayoutParams(width, height);
+            LayoutParams lp = child.calculateLayoutParams(width, height);
 
             // set exact size for child
             child.setLayoutParams(lp);

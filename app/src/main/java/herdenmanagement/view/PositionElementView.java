@@ -102,8 +102,13 @@ public class PositionElementView extends AppCompatImageView implements PropertyC
 
         // Bei Änderungen der Position, muss ein neues Layout berechnet werden
         else if (PositionsElement.PROPERTY_POSITION.equals(evt.getPropertyName())) {
-            // remeber current LayoutParams
+            // Möglicherweise ist die GUI noch nicht geladen
             AckerView ackerView = (AckerView) getParent();
+            if (ackerView == null) {
+                return;
+            }
+
+            // remember current LayoutParams
             final FrameLayout.LayoutParams lp = calculateLayoutParams(ackerView.getWidth(), ackerView.getHeight());
 
             // Bei Änderungen der Position, muss ein neues Layout berechnet werden

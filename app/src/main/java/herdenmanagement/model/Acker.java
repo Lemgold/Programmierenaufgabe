@@ -50,22 +50,27 @@ public class Acker extends BeobachtbaresElement {
     /**
      * Objekte der Klasse Rindvieh, die auf dem Acker unterwegs sind
      */
-    private List<Rindvieh> viecher;
+    private final List<Rindvieh> viecher;
 
     /**
      * Objekte der Klasse Gras, die auf dem Acker wachsen
      */
-    private List<Gras> graeser;
+    private final List<Gras> graeser;
 
     /**
      * Objekte der Klasse Eimer, die auf dem Acker stehen
      */
-    private List<Eimer> eimer;
+    private final List<Eimer> eimer;
 
     /**
-     * Anzahl der Zeilen und Spalten auf dem Acker
+     * Anzahl der Zeilen auf dem Acker
      */
-    private int zeilen, spalten;
+    private final int zeilen;
+
+    /**
+     * Anzahl der Spalten auf dem Acker
+     */
+    private final int spalten;
 
     /**
      * Erstellt einen neuen Acker und erzeugt die Listen für Gras, Eimer und Rinder.

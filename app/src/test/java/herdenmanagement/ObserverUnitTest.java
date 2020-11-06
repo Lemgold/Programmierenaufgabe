@@ -36,16 +36,16 @@ public class ObserverUnitTest {
 
         acker.lassGrasWachsen(new Position(1, 1));
         assertEquals(Acker.PROPERTY_GRAESER, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Gras);
+        assertTrue(evt.getNewValue() instanceof Gras);
 
         acker.stelleEimerAuf(new Position(2, 2));
         assertEquals(Acker.PROPERTY_EIMER, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Eimer);
+        assertTrue(evt.getNewValue() instanceof Eimer);
 
         Rindvieh rindvieh = new Rindvieh("Rindvieh");
         acker.lassRindWeiden(rindvieh);
         assertEquals(Acker.PROPERTY_VIECHER, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Rindvieh);
+        assertTrue(evt.getNewValue() instanceof Rindvieh);
     }
 
     @Test
@@ -59,17 +59,17 @@ public class ObserverUnitTest {
         rindvieh.geheVor();
 
         assertEquals(PositionsElement.PROPERTY_POSITION, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Position);
+        assertTrue(evt.getNewValue() instanceof Position);
         assertEquals(1, ((Position)evt.getNewValue()).x);
 
         rindvieh.dreheDichRechtsRum();
         assertEquals(Rindvieh.PROPERTY_RICHTUNG, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Rindvieh.RichtungsTyp);
+        assertTrue(evt.getNewValue() instanceof Rindvieh.RichtungsTyp);
         assertEquals(Rindvieh.RichtungsTyp.SUED, evt.getNewValue());
 
         rindvieh.dreheDichLinksRum();
         assertEquals(Rindvieh.PROPERTY_RICHTUNG, evt.getPropertyName());
-        assertEquals(true, evt.getNewValue() instanceof Rindvieh.RichtungsTyp);
+        assertTrue(evt.getNewValue() instanceof Rindvieh.RichtungsTyp);
         assertEquals(Rindvieh.RichtungsTyp.OST, evt.getNewValue());
     }
 }

@@ -52,7 +52,7 @@ public class Animator {
     /**
      * Liste von Actions, die nacheinander abgearbeitet werden
      */
-    private Queue<Action> actions = new ArrayBlockingQueue<>(1024);
+    private final Queue<Action> actions = new ArrayBlockingQueue<>(1024);
 
     /**
      * Erzeugt einen Animator im gegeben Context (= In der Ragel die MainActivity)
@@ -99,7 +99,10 @@ public class Animator {
      */
     public static abstract class Action implements Runnable {
 
-        private int waitingTime;
+        /**
+         * Wartezeit nach Ausführung der Action
+         */
+        private final int waitingTime;
 
         /**
          * Erzeugt eine Action. Die Wartezeit nach Ausführung der Action

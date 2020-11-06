@@ -1,8 +1,9 @@
 package herdenmanagement;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import de.ba.herdenmanagement.R;
 import herdenmanagement.model.Acker;
@@ -14,7 +15,7 @@ import herdenmanagement.view.Animator;
  * Hierzu wird unser {@link HerdenManager} initialisiert und mit einer {@link AckerView}
  * verknüpft.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private HerdenManager herdenManager;
 

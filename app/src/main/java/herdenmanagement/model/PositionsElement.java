@@ -62,7 +62,7 @@ public class PositionsElement extends BeobachtbaresElement {
      * Darstellende Views besitzen die selbe ID, um die Suche danach zu beschleunigen und
      * zu vereinfachen.
      */
-    private int id;
+    private final int id;
 
     /**
      * Der Acker besitzt mehrere Spalten und Zeilen. In den entstehenden Zellen wird ein

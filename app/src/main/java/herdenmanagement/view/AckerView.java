@@ -33,7 +33,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     /**
      * Versieht die Statusänderung von Objekten mit einer Animation
      */
-    private Animator animator;
+    private final Animator animator;
 
     /**
      * Dargestellter Acker
@@ -180,7 +180,7 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     /**
      * Paint to draw a text. Reused in {@link #onDraw(Canvas)}
      */
-    private static TextPaint TEXT_PAINT = new TextPaint();
+    private static final TextPaint TEXT_PAINT = new TextPaint();
     static {
         TEXT_PAINT.setTextSize(40);
         TEXT_PAINT.setColor(Color.LTGRAY);
@@ -189,23 +189,23 @@ public class AckerView extends FrameLayout implements PropertyChangeListener {
     /**
      * Paint to draw lines. Reused in {@link #onDraw(Canvas)}
      */
-    private static Paint PAINT = new Paint();
+    private static final Paint PAINT = new Paint();
     static {
         PAINT.setColor(Color.WHITE);
         PAINT.setStrokeWidth(6);
     }
 
-    private static Rect TEXT_RECT = new Rect();
+    private static final Rect TEXT_RECT = new Rect();
 
     protected void onDraw(Canvas canvas) {
         if (acker != null) {
             // Anzahl der Spalten und deren Breite ermitteln
             int columns = acker.zaehleSpalten();
-            float columnWidth = getWidth() / columns;
+            float columnWidth = getWidth() / (float)columns;
 
             // Anzahl der Zeilen und deren Höhe ermitteln
             int rows = acker.zaehleZeilen();
-            float rowHeight = getHeight() / rows;
+            float rowHeight = getHeight() / (float)rows;
 
             // Zeilenweise ....
             for (int y = 0; y < rows; y++) {

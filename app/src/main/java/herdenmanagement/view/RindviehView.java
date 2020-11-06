@@ -64,13 +64,13 @@ public class RindviehView extends PositionElementView {
     /**
      * Reuse the text bounds in onDraw
      */
-    private Rect TEXT_BOUNDS = new Rect();
+    private final Rect TEXT_BOUNDS = new Rect();
 
 
     /**
      * Reuse the text paint in onDraw
      */
-    private TextPaint TEXT_PAINT = new TextPaint();
+    private final TextPaint TEXT_PAINT = new TextPaint();
     {
         TEXT_PAINT.setTextSize(40);
         TEXT_PAINT.setAntiAlias(true);
@@ -124,7 +124,7 @@ public class RindviehView extends PositionElementView {
         // draw the name on bottom center
         canvas.drawText(
                 getRindvieh().gibName(),
-                getWidth() / 2 - TEXT_BOUNDS.centerX(),
+                (getWidth() / 2f) - TEXT_BOUNDS.centerX(),
                 getHeight() - TEXT_BOUNDS.height() + 10,
                 TEXT_PAINT);
     }

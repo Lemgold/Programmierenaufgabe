@@ -43,29 +43,29 @@ public class AckerUnitTest {
 
         rindvieh.setzePosition(new Position(0, 0));
 
-        boolean zurück = rindvieh.gehtsDaWeiterZurueck();
-        assertEquals(false, zurück);
+        boolean zurueck = rindvieh.gehtsDaWeiterZurueck();
+        assertFalse(zurueck);
 
         boolean vor = rindvieh.gehtsDaWeiterVor();
-        assertEquals(true, vor);
+        assertTrue(vor);
 
         rindvieh.geheVor();
-        zurück = rindvieh.gehtsDaWeiterZurueck();
-        assertEquals(true, zurück);
+        zurueck = rindvieh.gehtsDaWeiterZurueck();
+        assertTrue(zurueck);
 
         rindvieh.dreheDichRechtsRum();
         rindvieh.dreheDichRechtsRum();
 
         vor = rindvieh.gehtsDaWeiterVor();
-        assertEquals(true, vor);
+        assertTrue(vor);
 
         rindvieh.geheVor();
         vor = rindvieh.gehtsDaWeiterVor();
-        assertEquals(false, vor);
+        assertFalse(vor);
 
         rindvieh.geheZurueck();
         vor = rindvieh.gehtsDaWeiterVor();
-        assertEquals(true, vor);
+        assertTrue(vor);
     }
 
     @Test
@@ -73,16 +73,16 @@ public class AckerUnitTest {
         Acker acker = new Acker(5, 5);
 
         acker.lassGrasWachsen(new Position(2, 2));
-        assertEquals(false, acker.istDaGras(new Position(1, 2)));
-        assertEquals(true, acker.istDaGras(new Position(2, 2)));
+        assertFalse(acker.istDaGras(new Position(1, 2)));
+        assertTrue(acker.istDaGras(new Position(2, 2)));
 
         boolean entfernt = acker.entferneGras(new Position(2, 2));
-        assertEquals(false, acker.istDaGras(new Position(2, 2)));
-        assertEquals(true, entfernt);
+        assertFalse(acker.istDaGras(new Position(2, 2)));
+        assertTrue(entfernt);
 
         acker.stelleEimerAuf(new Position(4, 0));
-        assertEquals(false, acker.istDaEinEimer(new Position(4, 3)));
-        assertEquals(true, acker.istDaEinEimer(new Position(4, 0)));
+        assertFalse(acker.istDaEinEimer(new Position(4, 3)));
+        assertTrue(acker.istDaEinEimer(new Position(4, 0)));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class AckerUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void divisionDurchNull () {
-        @SuppressWarnings("NumericOverflow")
-        float result = 100 / 0;
+        @SuppressWarnings({"NumericOverflow", "divzero"})
+        float result = 100f / 0;
     }
 }

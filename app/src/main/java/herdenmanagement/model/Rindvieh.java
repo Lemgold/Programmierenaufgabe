@@ -60,10 +60,10 @@ public class Rindvieh extends PositionsElement {
     private RichtungsTyp richtung;
 
     /**
-     * Name des Rindviehs. Kühe können nur bei Ihrer Erzeugung benannt werden.
+     * Name des Rindviehs. Kühe können nur bei ihrer Erzeugung benannt werden.
      * Ein späteres Umbenennen ist nicht möglich.
      */
-    private String name;
+    private final String name;
 
     /**
      * Anzahl (Liter) Milch im Euter. Die Zahl erhöht sich durch {@link #frissGras()}. Sie

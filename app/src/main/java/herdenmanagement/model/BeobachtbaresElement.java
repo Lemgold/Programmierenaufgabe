@@ -33,7 +33,7 @@ public class BeobachtbaresElement {
      * Liste mit Objekten der Klasse PropertyChangeListener. Die Listener werden informiert, wenn
      * für die Properties der Klasse neue Eigenschaften gesetzt werden.
      */
-    private List<PropertyChangeListener> listeners;
+    private final List<PropertyChangeListener> listeners;
 
     /**
      * Erzeugt die Liste der Beobachter. Diese werden können erst später hinzugefügt werden,

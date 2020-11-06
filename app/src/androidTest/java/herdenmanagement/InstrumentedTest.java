@@ -2,9 +2,10 @@ package herdenmanagement;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,13 +26,13 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class InstrumentedTest {
 
     private AckerView ackerView;
 
     @Rule
-    public ActivityTestRule activityRule = new ActivityTestRule<>(
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(
             MainActivity.class,
             true,    // initialTouchMode
             false);  // launchActivity. False to set intent per method
@@ -80,8 +81,8 @@ public class InstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getContext();
 
-        assertEquals("de.ba.herdenmanagement", appContext.getPackageName());
+        assertNotNull(appContext.getPackageName());
     }
 }

@@ -2,10 +2,11 @@
 
 buildscript {
     repositories {
-        // replaces jcenter() and google()
-        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
-        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
+        jcenter()
         google()
+
+        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
+        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
     }
 
     dependencies {
@@ -18,12 +19,13 @@ buildscript {
 
 allprojects {
     repositories {
-        // replaces jcenter() and google()
-        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
-        maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
+        jcenter()
+        google()
+
+        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/libs/" }
+        // maven { url "http://dv-git01.dv.ba-dresden.local:8081/artifactory/dev/" }
 
         buildDir "${System.env.TEMP}/${rootProject.name}/${project.name}"
-        google()
     }
 }
 

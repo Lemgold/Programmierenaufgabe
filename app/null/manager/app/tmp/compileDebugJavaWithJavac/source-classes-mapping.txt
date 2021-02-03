@@ -1,0 +1,48 @@
+herdenmanagement/model/PositionsElement.java
+ herdenmanagement.model.PositionsElement
+herdenmanagement/model/TanzRind.java
+ herdenmanagement.model.TanzRind
+herdenmanagement/model/Eimer.java
+ herdenmanagement.model.Eimer
+herdenmanagement/view/GrasView.java
+ herdenmanagement.view.GrasView
+de/ba/herdenmanagement/BuildConfig.java
+ de.ba.herdenmanagement.BuildConfig
+herdenmanagement/model/Position.java
+ herdenmanagement.model.Position
+herdenmanagement/view/Animator.java
+ herdenmanagement.view.Animator
+ herdenmanagement.view.Animator$1
+ herdenmanagement.view.Animator$Action
+ herdenmanagement.view.Animator$Threading
+herdenmanagement/view/PositionElementView.java
+ herdenmanagement.view.PositionElementView
+ herdenmanagement.view.PositionElementView$1
+ herdenmanagement.view.PositionElementView$2
+ herdenmanagement.view.PositionElementView$3
+herdenmanagement/MainActivity.java
+ herdenmanagement.MainActivity
+ herdenmanagement.MainActivity$1
+herdenmanagement/model/Acker.java
+ herdenmanagement.model.Acker
+herdenmanagement/view/RindviehView.java
+ herdenmanagement.view.RindviehView
+herdenmanagement/HerdenManager.java
+ herdenmanagement.HerdenManager
+herdenmanagement/view/EimerView.java
+ herdenmanagement.view.EimerView
+herdenmanagement/model/BeobachtbaresElement.java
+ herdenmanagement.model.BeobachtbaresElement
+herdenmanagement/view/AckerView.java
+ herdenmanagement.view.AckerView
+ herdenmanagement.view.AckerView$1
+ herdenmanagement.view.AckerView$2
+herdenmanagement/model/Rindvieh.java
+ herdenmanagement.model.Rindvieh
+ herdenmanagement.model.Rindvieh$1
+ herdenmanagement.model.Rindvieh$RichtungsTyp
+ herdenmanagement.model.Rindvieh$StatusTyp
+herdenmanagement/model/KreisendesRindvieh.java
+ herdenmanagement.model.KreisendesRindvieh
+herdenmanagement/model/Gras.java
+ herdenmanagement.model.Gras
